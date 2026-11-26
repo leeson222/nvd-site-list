@@ -17,6 +17,7 @@
   .top h1 small { font-size: 13px; font-weight: 500; color: #888; margin-left: 12px; }
   .top p { font-size: 13px; font-weight: 600; }
 
+  .sticky-bar { position: sticky; top: 0; z-index: 10; }
   .tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e5e5; }
   .tabs button { padding: 10px 16px; border: 1px solid #ddd; border-radius: 12px; background: #fff; color: #555; }
   .tabs button.on { background: #111; border-color: #111; color: #fff; font-weight: 700; }
@@ -102,6 +103,7 @@
   <p>전체 가이드 및 화면리스트</p>
 </header>
 
+<div class="sticky-bar">
 <nav class="tabs" id="tabs"></nav>
 
 <div class="tools">
@@ -111,6 +113,7 @@
   </div>
   <input type="search" id="q" placeholder="파일명, 메뉴명 검색...">
   <span class="count">Count<b id="count">0</b></span>
+</div>
 </div>
 
 <div class="wrap">
