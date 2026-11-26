@@ -22,6 +22,9 @@
   .tabs button.on { background: #111; border-color: #111; color: #fff; font-weight: 700; }
 
   .tools { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 12px 28px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.04); }
+  .server { display: flex; margin-right: auto; padding: 3px; background: #f1f2f4; border-radius: 8px; }
+  .server button { padding: 6px 14px; border: 0; border-radius: 6px; background: none; color: #777; font-weight: 600; }
+  .server button.on { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
   .tools input { width: 260px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
   .tools .count { color: #888; }
   .tools .count b { color: #3355ff; font-size: 16px; margin: 0 4px; }
@@ -62,7 +65,9 @@
     .top h1 small { font-size: 12px; }
     .top p { font-size: 12px; color: #666; }
     .tabs { padding: 10px 16px; }
-    .tools { justify-content: space-between; padding: 10px 16px; }
+    .tools { flex-wrap: wrap; justify-content: space-between; padding: 10px 16px; }
+    .server { width: 100%; margin-right: 0; }
+    .server button { flex: 1; }
     .tools input { flex: 1; width: auto; min-width: 0; }
 
     .wrap { padding: 12px; overflow: visible; }
@@ -98,6 +103,10 @@
 <nav class="tabs" id="tabs"></nav>
 
 <div class="tools">
+  <div class="server" id="server">
+    <button type="button" class="on" data-server="live">운영서버</button>
+    <button type="button" data-server="dev">데브서버</button>
+  </div>
   <input type="search" id="q" placeholder="파일명, 메뉴명 검색...">
   <span class="count">Count<b id="count">0</b></span>
 </div>
@@ -122,7 +131,22 @@
 <script>
 // group: 탭 / type: page = 레이아웃이 붙는 화면, inc = 다른 화면에 import 되는 조각
 var D = '2026-11-26';
-var BASE = 'https://novadeal.co.kr/';
+var SERVERS = { live: 'https://novadeal.co.kr/', dev: 'https://novadealdev.cafe24.com/' };
+var BASE = SERVERS.live;
+// 데브서버에서 번호가 다른 주소
+var DEV_PATH = {
+  'product/list.html?cate_no=70': 'product/list.html?cate_no=154',
+  'product/detail.html?product_no=852': 'product/detail.html?product_no=83'
+};
+function link(path) { return BASE + (BASE === SERVERS.dev && DEV_PATH[path] || path); }
+
+[].forEach.call(document.querySelectorAll('#server button'), function (b) {
+  b.onclick = function () {
+    BASE = SERVERS[b.dataset.server];
+    [].forEach.call(b.parentNode.children, function (x) { x.className = x === b ? 'on' : ''; });
+    render();
+  };
+});
 var rows = [
   // 메인
   ['메인', '메인', '', '', 'index.html', 'page', ''],
@@ -181,11 +205,11 @@ var rows = [
   ['레이아웃', '임직원몰 레이아웃', '', '', 'pages/main/employee_main.html', 'inc', 'pages/layout/employee_layout.html'],
   ['레이아웃', '헤더', '헤더', 'type02', 'index.html', 'inc', 'pages/layout/header/header_type02.html'],
   ['레이아웃', '헤더', '임직원몰 헤더', '', 'pages/main/employee_main.html', 'inc', 'pages/layout/header/employee_header.html'],
-  ['레이아웃', '헤더', '서브 헤더', '', 'pages/sub/depth1_sub_main.html', 'inc', 'pages/layout/header/sub_header.html'],
-  ['레이아웃', '헤더', '로고 헤더', '', 'index.html', 'inc', 'pages/layout/header/logo_header.html'],
-  ['레이아웃', '헤더', '상품 헤더', '', 'product/list.html?cate_no=70', 'inc', 'pages/layout/header/prod_header.html'],
-  ['레이아웃', '헤더', '상품 상세 헤더', '', 'product/detail.html?product_no=852', 'inc', 'pages/layout/header/prod_detail_header.html'],
-  ['레이아웃', '헤더', '게시판 헤더', '', 'board/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/1/', 'inc', 'pages/layout/header/board_header.html'],
+  ['레이아웃', '헤더', '서브 헤더 (모바일)', '', 'pages/sub/depth1_sub_main.html', 'inc', 'pages/layout/header/sub_header.html'],
+  ['레이아웃', '헤더', '로고 헤더 (모바일)', '', 'index.html', 'inc', 'pages/layout/header/logo_header.html'],
+  ['레이아웃', '헤더', '상품 헤더 (모바일)', '', 'product/list.html?cate_no=70', 'inc', 'pages/layout/header/prod_header.html'],
+  ['레이아웃', '헤더', '상품 상세 헤더 (모바일)', '', 'product/detail.html?product_no=852', 'inc', 'pages/layout/header/prod_detail_header.html'],
+  ['레이아웃', '헤더', '게시판 헤더 (모바일)', '', 'board/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/1/', 'inc', 'pages/layout/header/board_header.html'],
   ['레이아웃', '푸터', '푸터', 'type01', 'index.html', 'inc', 'pages/layout/footer/footer_type01.html'],
 
   // 컴포넌트
@@ -225,7 +249,7 @@ function render() {
       '<td class="note" data-label="파일 경로">' + esc(r[6].indexOf('pages/') === 0 ? r[6] : r[4]) + '</td>' +
       '<td class="date" data-label="Date">' + D + '</td>' +
       '<td class="type" data-label="구분"><span class="badge ' + r[5] + '">' + (r[5] === 'page' ? '화면' : '인클루드') + '</span></td>' +
-      '<td class="url" data-label="URL"><a href="' + esc(BASE + r[4]) + '" target="_blank" title="' + esc(BASE + r[4]) + '">' + esc(BASE + r[4]) + '</a></td>' +
+      '<td class="url" data-label="URL"><a href="' + esc(link(r[4])) + '" target="_blank" title="' + esc(link(r[4])) + '">' + esc(link(r[4])) + '</a></td>' +
       '</tr>';
   }).join('') : '<tr><td colspan="8" class="empty">검색 결과가 없습니다.</td></tr>';
 }
