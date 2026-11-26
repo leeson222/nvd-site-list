@@ -42,6 +42,50 @@
   .badge.inc { background: #f1f1f1; color: #777; }
   td.note { color: #666; }
   .empty { text-align: center; padding: 40px; color: #999; }
+  td.url a, td.note { word-break: break-all; }
+
+  /* 태블릿: 상단 정리 + 표는 가로 스크롤 */
+  @media (max-width: 1024px) {
+    .top { padding: 18px 20px; }
+    .tabs { padding: 12px 20px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tabs button { flex: none; padding: 8px 14px; }
+    .tools { padding: 10px 20px; }
+    .wrap { padding: 16px; overflow-x: auto; }
+    table { min-width: 960px; }
+  }
+
+  /* 모바일: 표를 카드형으로 */
+  @media (max-width: 768px) {
+    body { font-size: 13px; }
+    .top { flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; }
+    .top h1 img { max-width: 100px; }
+    .top h1 small { font-size: 12px; }
+    .top p { font-size: 12px; color: #666; }
+    .tabs { padding: 10px 16px; }
+    .tools { justify-content: space-between; padding: 10px 16px; }
+    .tools input { flex: 1; width: auto; min-width: 0; }
+
+    .wrap { padding: 12px; overflow: visible; }
+    table { min-width: 0; border: 0; background: none; }
+    thead { display: none; }
+    tbody, tr, td { display: block; }
+    tbody tr { position: relative; margin-bottom: 10px; padding: 14px 14px 10px; background: #fff !important; border: 1px solid #e5e5e5; border-radius: 10px; }
+    td { padding: 0; border: 0; width: auto !important; text-align: left !important; }
+
+    td.num { position: absolute; top: 14px; right: 14px; font-size: 12px; color: #aaa; }
+    td.d { display: inline; font-size: 14px; font-weight: 700; color: #111; }
+    td.d:empty { display: none; }
+    td.d2:not(:empty)::before, td.d3:not(:empty)::before { content: " › "; color: #bbb; font-weight: 400; }
+    td.d3 { display: inline; }
+    td.d3 + td { margin-top: 10px; }
+
+    td[data-label] { display: flex; gap: 10px; padding: 5px 0; border-top: 1px dashed #eee; font-size: 12px; }
+    td[data-label]::before { content: attr(data-label); flex: none; width: 58px; color: #999; }
+    td.note { margin-top: 10px; }
+    td.date { color: #666; }
+    td.url a { display: inline; color: #3355ff; }
+    .empty { padding: 30px 0; text-align: center !important; }
+  }
 </style>
 </head>
 <body>
@@ -177,11 +221,11 @@ function render() {
   document.getElementById('list').innerHTML = list.length ? list.map(function (r, i) {
     return '<tr>' +
       '<td class="num">' + String(i + 1).padStart(2, '0') + '</td>' +
-      '<td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2] + (r[3] ? ' · ' + r[3] : '')) + '</td>' +
-      '<td class="note">' + esc(r[6].indexOf('pages/') === 0 ? r[6] : r[4]) + '</td>' +
-      '<td class="date">' + D + '</td>' +
-      '<td class="type"><span class="badge ' + r[5] + '">' + (r[5] === 'page' ? '화면' : '인클루드') + '</span></td>' +
-      '<td class="url"><a href="' + esc(BASE + r[4]) + '" target="_blank" title="' + esc(BASE + r[4]) + '">' + esc(BASE + r[4]) + '</a></td>' +
+      '<td class="d d1">' + esc(r[0]) + '</td><td class="d d2">' + esc(r[1]) + '</td><td class="d d3">' + esc(r[2] + (r[3] ? ' · ' + r[3] : '')) + '</td>' +
+      '<td class="note" data-label="파일 경로">' + esc(r[6].indexOf('pages/') === 0 ? r[6] : r[4]) + '</td>' +
+      '<td class="date" data-label="Date">' + D + '</td>' +
+      '<td class="type" data-label="구분"><span class="badge ' + r[5] + '">' + (r[5] === 'page' ? '화면' : '인클루드') + '</span></td>' +
+      '<td class="url" data-label="URL"><a href="' + esc(BASE + r[4]) + '" target="_blank" title="' + esc(BASE + r[4]) + '">' + esc(BASE + r[4]) + '</a></td>' +
       '</tr>';
   }).join('') : '<tr><td colspan="8" class="empty">검색 결과가 없습니다.</td></tr>';
 }
