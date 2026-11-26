@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>skin15 전체 화면리스트</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif; font-size: 13px; color: #222; background: #f5f6f8; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 22px 28px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  .top h1 { font-size: 20px; font-weight: 800; }
+  .top h1 { display: flex; align-items: center; }
+  .top h1 img { max-width: 120px; height: auto; display: block; }
+  .top h1 small { font-size: 13px; font-weight: 500; color: #888; margin-left: 12px; }
+  .top p { font-size: 13px; font-weight: 600; }
+
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  .tabs button { padding: 10px 16px; border: 1px solid #ddd; border-radius: 12px; background: #fff; color: #555; }
+  .tabs button.on { background: #111; border-color: #111; color: #fff; font-weight: 700; }
+
+  .tools { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 12px 28px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.04); }
+  .tools input { width: 260px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
+  .tools .count { color: #888; }
+  .tools .count b { color: #3355ff; font-size: 16px; margin: 0 4px; }
+
+  .wrap { padding: 20px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e5e5; }
+  th { background: #f8f9fa; font-weight: 600; color: #444; padding: 10px 8px; border: 1px solid #e5e5e5; }
+  td { padding: 9px 10px; border-bottom: 1px solid #eee; border-right: 1px solid #f0f0f0; vertical-align: middle; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  tbody tr:hover { background: #eef2ff; }
+  td.num { text-align: center; font-weight: 600; width: 56px; }
+  td.url a { display: inline-flex; align-items: center; gap: 6px; }
+  td.url a:hover { color: #3355ff; text-decoration: underline; }
+  td.date { text-align: center; color: #aaa; width: 100px; }
+  td.type { text-align: center; width: 90px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
+  .badge.page { background: #e8edff; color: #3355ff; }
+  .badge.inc { background: #f1f1f1; color: #777; }
+  td.note { color: #666; }
+  .empty { text-align: center; padding: 40px; color: #999; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1><img src="https://ecimg.cafe24img.com/pg2766b24144276030/etlandmall/logo-new03.png" alt="노바딜"><small>퍼블리싱 산출물 / skin-skin15</small></h1>
+  <p>전체 가이드 및 화면리스트</p>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<div class="tools">
+  <input type="search" id="q" placeholder="파일명, 메뉴명 검색...">
+  <span class="count">Count<b id="count">0</b></span>
+</div>
+
+<div class="wrap">
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Num</th>
+        <th colspan="3">DEPTH</th>
+        <th rowspan="2">파일 경로</th>
+        <th rowspan="2">Date</th>
+        <th rowspan="2">구분</th>
+        <th rowspan="2">URL</th>
+      </tr>
+      <tr><th>1depth</th><th>2depth</th><th>3depth</th></tr>
+    </thead>
+    <tbody id="list"></tbody>
+  </table>
+</div>
+
+<script>
+// group: 탭 / type: page = 레이아웃이 붙는 화면, inc = 다른 화면에 import 되는 조각
+var D = '2026-11-26';
+var BASE = 'https://novadeal.co.kr/';
+var rows = [
+  // 메인
+  ['메인', '메인', '', '', 'index.html', 'page', ''],
+  ['메인', '메인 모듈', '메인 비주얼', '', 'index.html', 'inc', 'pages/main/mainVisual.html'],
+  ['메인', '메인 모듈', 'AI 검색 영역', '', 'index.html', 'inc', 'pages/main/ai_search_area.html'],
+  ['메인', '메인 모듈', '퀵메뉴', '', 'index.html', 'inc', 'pages/main/mainQuick.html'],
+  ['메인', '메인 모듈', '타임핫딜', '', 'index.html', 'inc', 'pages/main/mainTimedeal.html'],
+  ['메인', '메인 모듈', 'MD PICK', '', 'index.html', 'inc', 'pages/main/mainMdPick.html'],
+  ['메인', '메인 모듈', '배너 01', '', 'index.html', 'inc', 'pages/main/mainBanner01.html'],
+  ['메인', '메인 모듈', 'AI 추천 영역', '', 'index.html', 'inc', 'pages/main/ai_suggestion_area.html'],
+  ['메인', '메인 모듈', '기획전 (상단)', '', 'index.html', 'inc', 'pages/main/mainPromo.html'],
+  ['메인', '메인 모듈', '배너 02', '', 'index.html', 'inc', 'pages/main/mainBanner02.html'],
+  ['메인', '메인 모듈', '기획전 02', '', 'index.html', 'inc', 'pages/main/mainPromo02.html'],
+  ['메인', '메인 모듈', '리뷰', '', 'index.html', 'inc', 'pages/main/mainReview.html'],
+  ['메인', '메인 모듈', '기획전 (하단)', '', 'index.html', 'inc', 'pages/main/mainPromoLast.html'],
+  ['메인', '메인 모듈', 'AI 상품 영역', '', 'index.html', 'inc', 'pages/main/ai_products_area.html'],
+
+  // 서브
+  ['서브', '카테고리 메인', 'TV/영상가전 서브메인', '', 'pages/sub/depth1_sub_main.html', 'page', ''],
+  ['서브', '카테고리 메인', '주방가전 서브메인', '', 'pages/sub/depth2_sub_main.html', 'page', ''],
+  ['서브', '카테고리 메인', '생활가전 서브메인', '', 'pages/sub/depth3_sub_main.html', 'page', ''],
+  ['서브', '카테고리 메인', '계절가전 서브메인', '', 'pages/sub/depth4_sub_main.html', 'page', ''],
+  ['서브', '카테고리 메인', '컴퓨터/디지털 서브메인', '', 'pages/sub/depth5_sub_main.html', 'page', ''],
+  ['서브', '검색', '상품 검색', '', 'pages/sub/product_search.html', 'page', ''],
+  ['서브', '검색', 'AI 검색', '', 'pages/sub/ai_search.html', 'page', ''],
+  ['서브', '검색', 'AI 검색', '검색 입력 영역', 'pages/sub/ai_search.html', 'inc', 'pages/sub/ai_search_component.html'],
+
+  // 프로모션
+  ['프로모션', '기획전', '리스트', '', 'pages/promotion/project_list.html', 'page', ''],
+  ['프로모션', '기획전', '상세', '', 'pages/promotion/project_detail.html?idx=3', 'page', 'pages/promotion/project_detail.html'],
+  ['프로모션', '기획전', '상세', '본문 (공통)', 'pages/promotion/project_detail.html?idx=3', 'inc', 'pages/promotion/project_detail_body.html'],
+  ['프로모션', '기획전', '미리보기', '', 'pages/promotion/project_preview.html', 'page', ''],
+  ['프로모션', '이벤트', '상세', '', 'pages/promotion/event_read.html', 'page', ''],
+  ['프로모션', '이벤트', '상세', '본문 (공통)', 'pages/promotion/event_read.html', 'inc', 'pages/promotion/event_read_body.html'],
+  ['프로모션', '이벤트', '미리보기', '', 'pages/promotion/event_preview.html', 'page', ''],
+  ['프로모션', '타임딜', '', '', 'pages/promotion/promo_timedeal.html', 'page', ''],
+  ['프로모션', '다중할인', '안내', '', 'pages/promotion/multi_discount_guide.html', 'page', ''],
+  ['프로모션', '다중할인', '샵', '', 'pages/promotion/multi_discount_shop.html', 'page', ''],
+
+  // 임직원몰
+  ['임직원몰', '메인', '', '', 'pages/main/employee_main.html', 'page', 'employee_layout'],
+  ['임직원몰', '진입', '', '', 'pages/employee/employee-entry.html', 'page', 'employee_layout'],
+  ['임직원몰', '이메일 인증', '인증 요청', '', 'pages/employee/employee-email-auth.html', 'page', 'employee_layout'],
+  ['임직원몰', '이메일 인증', '메일 발송 완료', '', 'pages/employee/employee-email-auth-sent.html', 'page', 'employee_layout'],
+  ['임직원몰', '이메일 인증', '인증 완료', '', 'pages/employee/employee-email-auth-complete.html', 'page', 'employee_layout'],
+  ['임직원몰', '이메일 인증', '인증 만료', '', 'pages/employee/employee-email-auth-expire.html', 'page', 'employee_layout'],
+  ['임직원몰', '이메일 인증', '인증 메일 양식', '', 'pages/employee/employee-form-mail.html', 'inc', '메일 템플릿'],
+  ['임직원몰', '마이페이지', '', '', 'pages/employee/employee-mypage.html', 'page', 'employee_layout'],
+
+  // 폐쇄몰
+  ['폐쇄몰', '진입', '', '', 'pages/closed/closed-entry.html', 'page', ''],
+  ['폐쇄몰', '메인', '', '', 'pages/closed/closed-main.html', 'page', ''],
+  ['폐쇄몰', '시크릿 코드 입력', '', '', 'pages/private-shop/secret_code_page.html', 'page', ''],
+
+  // 레이아웃
+  ['레이아웃', '임직원몰 레이아웃', '', '', 'pages/main/employee_main.html', 'inc', 'pages/layout/employee_layout.html'],
+  ['레이아웃', '헤더', '헤더', 'type02', 'index.html', 'inc', 'pages/layout/header/header_type02.html'],
+  ['레이아웃', '헤더', '임직원몰 헤더', '', 'pages/main/employee_main.html', 'inc', 'pages/layout/header/employee_header.html'],
+  ['레이아웃', '헤더', '서브 헤더', '', 'pages/sub/depth1_sub_main.html', 'inc', 'pages/layout/header/sub_header.html'],
+  ['레이아웃', '헤더', '로고 헤더', '', 'index.html', 'inc', 'pages/layout/header/logo_header.html'],
+  ['레이아웃', '헤더', '상품 헤더', '', 'product/list.html?cate_no=70', 'inc', 'pages/layout/header/prod_header.html'],
+  ['레이아웃', '헤더', '상품 상세 헤더', '', 'product/detail.html?product_no=852', 'inc', 'pages/layout/header/prod_detail_header.html'],
+  ['레이아웃', '헤더', '게시판 헤더', '', 'board/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/1/', 'inc', 'pages/layout/header/board_header.html'],
+  ['레이아웃', '푸터', '푸터', 'type01', 'index.html', 'inc', 'pages/layout/footer/footer_type01.html'],
+
+  // 컴포넌트
+  ['컴포넌트', '상품 리스트', '필터', '', 'pages/sub/product_search.html', 'inc', 'pages/components/prod_filter.html'],
+];
+
+var groups = ['전체'];
+rows.forEach(function (r) { if (groups.indexOf(r[0]) < 0) groups.push(r[0]); });
+var current = '전체';
+
+var tabs = document.getElementById('tabs');
+groups.forEach(function (g) {
+  var b = document.createElement('button');
+  b.textContent = g;
+  if (g === current) b.className = 'on';
+  b.onclick = function () {
+    current = g;
+    [].forEach.call(tabs.children, function (x) { x.className = x === b ? 'on' : ''; });
+    render();
+  };
+  tabs.appendChild(b);
+});
+
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+function render() {
+  var q = document.getElementById('q').value.trim().toLowerCase();
+  var list = rows.filter(function (r) {
+    if (current !== '전체' && r[0] !== current) return false;
+    return !q || r.join(' ').toLowerCase().indexOf(q) > -1;
+  });
+  document.getElementById('count').textContent = list.length;
+  document.getElementById('list').innerHTML = list.length ? list.map(function (r, i) {
+    return '<tr>' +
+      '<td class="num">' + String(i + 1).padStart(2, '0') + '</td>' +
+      '<td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2] + (r[3] ? ' · ' + r[3] : '')) + '</td>' +
+      '<td class="note">' + esc(r[6].indexOf('pages/') === 0 ? r[6] : r[4]) + '</td>' +
+      '<td class="date">' + D + '</td>' +
+      '<td class="type"><span class="badge ' + r[5] + '">' + (r[5] === 'page' ? '화면' : '인클루드') + '</span></td>' +
+      '<td class="url"><a href="' + esc(BASE + r[4]) + '" target="_blank" title="' + esc(BASE + r[4]) + '">' + esc(BASE + r[4]) + '</a></td>' +
+      '</tr>';
+  }).join('') : '<tr><td colspan="8" class="empty">검색 결과가 없습니다.</td></tr>';
+}
+
+document.getElementById('q').addEventListener('input', render);
+render();
+</script>
+</body>
+</html>
