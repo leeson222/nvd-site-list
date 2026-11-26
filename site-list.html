@@ -38,6 +38,7 @@
   td.num { text-align: center; font-weight: 600; width: 56px; }
   td.url a { display: inline-flex; align-items: center; gap: 6px; }
   td.url a:hover { color: #3355ff; text-decoration: underline; }
+  td.memo { width: 260px; font-size: 12px; color: #e5484d; }
   td.date { text-align: center; color: #aaa; width: 100px; }
   td.type { text-align: center; width: 90px; }
   .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
@@ -54,7 +55,7 @@
     .tabs button { flex: none; padding: 8px 14px; }
     .tools { padding: 10px 20px; }
     .wrap { padding: 16px; overflow-x: auto; }
-    table { min-width: 960px; }
+    table { min-width: 1200px; }
   }
 
   /* 모바일: 표를 카드형으로 */
@@ -87,6 +88,7 @@
     td[data-label] { display: flex; gap: 10px; padding: 5px 0; border-top: 1px dashed #eee; font-size: 12px; }
     td[data-label]::before { content: attr(data-label); flex: none; width: 58px; color: #999; }
     td.note { margin-top: 10px; }
+    td.memo:empty { display: none; }
     td.date { color: #666; }
     td.url a { display: inline; color: #3355ff; }
     .empty { padding: 30px 0; text-align: center !important; }
@@ -121,6 +123,7 @@
         <th rowspan="2">Date</th>
         <th rowspan="2">구분</th>
         <th rowspan="2">URL</th>
+        <th rowspan="2">비고</th>
       </tr>
       <tr><th>1depth</th><th>2depth</th><th>3depth</th></tr>
     </thead>
@@ -137,6 +140,11 @@ var BASE = SERVERS.live;
 var DEV_PATH = {
   'product/list.html?cate_no=70': 'product/list.html?cate_no=154',
   'product/detail.html?product_no=852': 'product/detail.html?product_no=83'
+};
+var NOTES = {
+  employee: '임직원이 아닐 경우 로그인 페이지로 리다이렉트됩니다.',
+  product: '상품이 없거나 카테고리가 사라지거나 번호가 바뀔 경우 페이지가 뜨지 않습니다.',
+  post: '게시글마다 뒤에 붙는 번호가 달라 프로모션 리스트로 연결했습니다. 리스트에서 게시글을 눌러 이동해 주세요.'
 };
 function link(path) { return BASE + (BASE === SERVERS.dev && DEV_PATH[path] || path); }
 
@@ -176,12 +184,12 @@ var rows = [
 
   // 프로모션
   ['프로모션', '기획전', '리스트', '', 'pages/promotion/project_list.html', 'page', ''],
-  ['프로모션', '기획전', '상세', '', 'pages/promotion/project_detail.html?idx=3', 'page', 'pages/promotion/project_detail.html'],
-  ['프로모션', '기획전', '상세', '본문 (공통)', 'pages/promotion/project_detail.html?idx=3', 'inc', 'pages/promotion/project_detail_body.html'],
-  ['프로모션', '기획전', '미리보기', '', 'pages/promotion/project_preview.html', 'page', ''],
-  ['프로모션', '이벤트', '상세', '', 'pages/promotion/event_read.html', 'page', ''],
-  ['프로모션', '이벤트', '상세', '본문 (공통)', 'pages/promotion/event_read.html', 'inc', 'pages/promotion/event_read_body.html'],
-  ['프로모션', '이벤트', '미리보기', '', 'pages/promotion/event_preview.html', 'page', ''],
+  ['프로모션', '기획전', '상세', '', 'pages/promotion/project_list.html', 'page', 'pages/promotion/project_detail.html', 'post'],
+  ['프로모션', '기획전', '상세', '본문 (공통)', 'pages/promotion/project_list.html', 'inc', 'pages/promotion/project_detail_body.html', 'post'],
+  ['프로모션', '기획전', '미리보기', '', 'pages/promotion/project_list.html', 'page', 'pages/promotion/project_preview.html', 'post'],
+  ['프로모션', '이벤트', '상세', '', 'pages/promotion/project_list.html', 'page', 'pages/promotion/event_read.html', 'post'],
+  ['프로모션', '이벤트', '상세', '본문 (공통)', 'pages/promotion/project_list.html', 'inc', 'pages/promotion/event_read_body.html', 'post'],
+  ['프로모션', '이벤트', '미리보기', '', 'pages/promotion/project_list.html', 'page', 'pages/promotion/event_preview.html', 'post'],
   ['프로모션', '타임딜', '', '', 'pages/promotion/promo_timedeal.html', 'page', ''],
   ['프로모션', '다중할인', '안내', '', 'pages/promotion/multi_discount_guide.html', 'page', ''],
   ['프로모션', '다중할인', '샵', '', 'pages/promotion/multi_discount_shop.html', 'page', ''],
@@ -207,8 +215,8 @@ var rows = [
   ['레이아웃', '헤더', '임직원몰 헤더', '', 'pages/main/employee_main.html', 'inc', 'pages/layout/header/employee_header.html'],
   ['레이아웃', '헤더', '서브 헤더 (모바일)', '', 'pages/sub/depth1_sub_main.html', 'inc', 'pages/layout/header/sub_header.html'],
   ['레이아웃', '헤더', '로고 헤더 (모바일)', '', 'index.html', 'inc', 'pages/layout/header/logo_header.html'],
-  ['레이아웃', '헤더', '상품 헤더 (모바일)', '', 'product/list.html?cate_no=70', 'inc', 'pages/layout/header/prod_header.html'],
-  ['레이아웃', '헤더', '상품 상세 헤더 (모바일)', '', 'product/detail.html?product_no=852', 'inc', 'pages/layout/header/prod_detail_header.html'],
+  ['레이아웃', '헤더', '상품 헤더 (모바일)', '', 'product/list.html?cate_no=70', 'inc', 'pages/layout/header/prod_header.html', 'product'],
+  ['레이아웃', '헤더', '상품 상세 헤더 (모바일)', '', 'product/detail.html?product_no=852', 'inc', 'pages/layout/header/prod_detail_header.html', 'product'],
   ['레이아웃', '헤더', '게시판 헤더 (모바일)', '', 'board/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD/1/', 'inc', 'pages/layout/header/board_header.html'],
   ['레이아웃', '푸터', '푸터', 'type01', 'index.html', 'inc', 'pages/layout/footer/footer_type01.html'],
 
@@ -250,8 +258,9 @@ function render() {
       '<td class="date" data-label="Date">' + D + '</td>' +
       '<td class="type" data-label="구분"><span class="badge ' + r[5] + '">' + (r[5] === 'page' ? '화면' : '인클루드') + '</span></td>' +
       '<td class="url" data-label="URL"><a href="' + esc(link(r[4])) + '" target="_blank" title="' + esc(link(r[4])) + '">' + esc(link(r[4])) + '</a></td>' +
+      '<td class="memo" data-label="비고">' + (NOTES[r[4].indexOf('employee') > -1 ? 'employee' : r[7]] || '') + '</td>' +
       '</tr>';
-  }).join('') : '<tr><td colspan="8" class="empty">검색 결과가 없습니다.</td></tr>';
+  }).join('') : '<tr><td colspan="9" class="empty">검색 결과가 없습니다.</td></tr>';
 }
 
 document.getElementById('q').addEventListener('input', render);
