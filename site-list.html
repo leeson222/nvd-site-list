@@ -641,7 +641,7 @@ groups.forEach(function (g) {
   if (g === current) b.className = 'on';
   b.onclick = function () {
     current = g;
-    [].forEach.call(tabs.children, function (x) { x.className = x === b ? 'on' : ''; });
+    [].forEach.call(tabs.querySelectorAll('button'), function (x) { x.className = x === b ? 'on' : ''; });
     render();
   };
   tabs.appendChild(b);
