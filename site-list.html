@@ -3,29 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>skin15 전체 화면리스트</title>
+<title>NOVADEAL 퍼블리싱 산출물 명세서</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Pretendard, "Noto Sans KR", "Malgun Gothic", sans-serif; font-size: 13px; color: #222; background: #f5f6f8; }
+  body { font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Malgun Gothic", sans-serif; font-size: 13px; color: #222; background: #f5f6f8; word-break: keep-all; overflow-wrap: break-word; }
   a { color: inherit; text-decoration: none; }
   button { font: inherit; cursor: pointer; }
 
-  .top { display: flex; justify-content: space-between; align-items: center; padding: 22px 28px; background: #fff; border-bottom: 1px solid #e5e5e5; }
-  .top h1 { font-size: 20px; font-weight: 800; }
-  .top h1 { display: flex; align-items: center; }
-  .top h1 img { max-width: 120px; height: auto; display: block; }
-  .top h1 small { font-size: 13px; font-weight: 500; color: #888; margin-left: 12px; }
-  .top p { font-size: 13px; font-weight: 600; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 28px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  .top h1 { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; }
+  .top h1 img { max-width: 110px; height: auto; display: block; padding-right: 12px; border-right: 1px solid #e5e5e5; }
+  .top .sub { margin-top: 6px; font-size: 12px; color: #888; line-height: 1.5; }
+  .top .sub b { color: #444; font-weight: 600; margin-right: 6px; }
+  .doc-meta { display: grid; grid-template-columns: repeat(3, auto); gap: 4px 20px; flex: none; font-size: 12px; }
+  .doc-meta div { display: flex; gap: 8px; white-space: nowrap; }
+  .doc-meta dt { color: #999; }
+  .doc-meta dd { color: #222; font-weight: 600; }
 
   .sticky-bar { position: sticky; top: 0; z-index: 10; }
-  .tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  .tabs-row { display: flex; align-items: center; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  .tabs { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 28px; }
+  .tools-toggle { display: none; }
   .tabs button { padding: 10px 16px; border: 1px solid #ddd; border-radius: 12px; background: #fff; color: #555; }
   .tabs button.on { background: #111; border-color: #111; color: #fff; font-weight: 700; }
+  .tabs .ext-link { flex: none; display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 10px 16px; border: 1px solid #3355ff; border-radius: 12px; color: #3355ff; font-weight: 600; white-space: nowrap; }
+  .tabs .ext-link:hover { background: #3355ff; color: #fff; }
 
   .tools { display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 12px 28px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.04); }
-  .server { display: flex; margin-right: auto; padding: 3px; background: #f1f2f4; border-radius: 8px; }
+  .server { display: flex; padding: 3px; background: #f1f2f4; border-radius: 8px; }
   .server button { padding: 6px 14px; border: 0; border-radius: 6px; background: none; color: #777; font-weight: 600; }
   .server button.on { background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .root { margin-right: auto; color: #888; }
+  .root b { margin-left: 6px; padding: 3px 8px; border-radius: 4px; background: #111; color: #fff; font-weight: 600; }
+  .root-prefix { color: #3355ff; font-weight: 600; white-space: nowrap; }
   .tools input { width: 260px; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
   .tools .count { color: #888; }
   .tools .count b { color: #3355ff; font-size: 16px; margin: 0 4px; }
@@ -37,17 +48,51 @@
   tbody tr:nth-child(even) { background: #fafafa; }
   tbody tr:hover { background: #eef2ff; }
   td.num { text-align: center; font-weight: 600; width: 56px; }
+  td.d1 { white-space: nowrap; }
   td.url a { display: inline-flex; align-items: center; gap: 6px; }
   td.url a:hover { color: #3355ff; text-decoration: underline; }
   td.memo { width: 260px; font-size: 12px; color: #e5484d; }
-  td.date { text-align: center; color: #aaa; width: 100px; }
   td.type { text-align: center; width: 90px; }
   .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; }
   .badge.page { background: #e8edff; color: #3355ff; }
   .badge.inc { background: #f1f1f1; color: #777; }
+  .badge.css { background: #e6f7ee; color: #12805c; }
+  .badge.js { background: #fff4d6; color: #a86700; }
+  .st { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; font-style: normal; white-space: nowrap; }
+  .st-always { background: #e6f7ee; color: #12805c; }
+  .st-cond { background: #e8edff; color: #3355ff; }
+  .st-admin { background: #f1e8ff; color: #7a3fd1; }
+  .st-unused { background: #eee; color: #777; }
+  .st-tpl { background: #fff4d6; color: #a86700; }
+  .st-backup { background: #f3ede6; color: #8a6a4a; }
+  .st-check { background: #ffe8e8; color: #d33; }
+  td.status { width: 200px; }
+  .st-note { margin-top: 4px; font-size: 12px; color: #666; line-height: 1.45; }
+  .st-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-bottom: 12px; padding: 10px 14px; background: #fff; border: 1px solid #e5e5e5; font-size: 12px; color: #777; }
+  .st-legend strong { color: #222; margin-right: 4px; }
+  .st-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .select-wrap { position: relative; display: inline-flex; }
+  .select-wrap::after { content: ""; position: absolute; top: 50%; right: 14px; width: 10px; height: 6px; margin-top: -3px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / 10px 6px; pointer-events: none; transition: transform .2s ease; }
+  .select-wrap.is-open::after { transform: rotate(180deg); }
+  .tools select { padding: 7px 36px 7px 12px; border: 1px solid #ddd; border-radius: 6px; font: inherit; color: #222; background: #fff; -webkit-appearance: none; appearance: none; cursor: pointer; }
   td.note { color: #666; }
+  td.desc { width: 300px; line-height: 1.55; color: #333; }
+  td.dep { width: 340px; font-size: 12px; line-height: 1.6; }
+  .dep dl { display: grid; grid-template-columns: 64px 1fr; gap: 2px 8px; }
+  .dep dt { color: #999; white-space: nowrap; }
+  .dep dd { overflow-wrap: anywhere; color: #444; }
+  .dep dd span { display: inline-block; margin: 0 4px 2px 0; padding: 0 6px; border-radius: 4px; background: #f1f3f7; }
+  .dep dd span.cafe { background: #fff; border: 1px solid #e3e3e3; color: #888; }
+  .dep dd span.all { background: #3355ff; color: #fff; }
+  .type-legend { margin-top: 6px; font-size: 11px; font-weight: 400; color: #777; text-align: left; white-space: nowrap; }
+  .type-legend p { display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+  .type-legend .badge { padding: 0 6px; font-size: 11px; }
+  .dep-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 400; }
+  .dep-legend span { padding: 0 6px; border-radius: 4px; background: #f1f3f7; color: #444; line-height: 1.6; }
+  .dep-legend span.cafe { background: #fff; border: 1px solid #e3e3e3; color: #888; }
+  .dep-legend span.all { background: #3355ff; color: #fff; }
   .empty { text-align: center; padding: 40px; color: #999; }
-  td.url a, td.note { word-break: break-all; }
+  td.url a, td.note { overflow-wrap: anywhere; }
 
   /* 태블릿: 상단 정리 + 표는 가로 스크롤 */
   @media (max-width: 1024px) {
@@ -56,19 +101,31 @@
     .tabs button { flex: none; padding: 8px 14px; }
     .tools { padding: 10px 20px; }
     .wrap { padding: 16px; overflow-x: auto; }
-    table { min-width: 1200px; }
+    table { min-width: 1800px; }
   }
 
   /* 모바일: 표를 카드형으로 */
   @media (max-width: 768px) {
     body { font-size: 13px; }
     .top { flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; }
-    .top h1 img { max-width: 100px; }
-    .top h1 small { font-size: 12px; }
-    .top p { font-size: 12px; color: #666; }
+    .top { gap: 12px; }
+    .top h1 { flex-wrap: wrap; font-size: 16px; }
+    .top h1 img { max-width: 90px; }
+    .doc-meta { grid-template-columns: repeat(2, auto); width: 100%; padding-top: 10px; border-top: 1px dashed #eee; }
     .tabs { padding: 10px 16px; }
     .tools { flex-wrap: wrap; justify-content: space-between; padding: 10px 16px; }
-    .server { width: 100%; margin-right: 0; }
+    /* 모바일: 탭만 고정 노출, 서버·검색·필터는 토글 */
+    .tabs-row { flex-direction: column; align-items: stretch; }
+    .tabs { padding-bottom: 8px; margin-bottom: 8px; }
+    .tools-toggle { flex: none; display: flex; justify-content: center; align-items: center; gap: 6px; margin: 0 16px 10px; padding: 7px 12px; border: 1px solid #ddd; border-radius: 12px; background: #fff; color: #555; font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .tools-toggle b { color: #3355ff; }
+    .tools-toggle.has-filter { border-color: #3355ff; color: #3355ff; }
+    .tools-toggle i { width: 10px; height: 6px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / 10px 6px; transition: transform .2s ease; }
+    .sticky-bar .tools { display: none; }
+    .sticky-bar.tools-open .tools { display: flex; }
+    .sticky-bar.tools-open .tools-toggle i { transform: rotate(180deg); }
+    .server { width: 100%; }
+    .root { width: 100%; margin-right: 0; }
     .server button { flex: 1; }
     .tools input { flex: 1; width: auto; min-width: 0; }
 
@@ -87,11 +144,16 @@
     td.d3 + td { margin-top: 10px; }
 
     td[data-label] { display: flex; gap: 10px; padding: 5px 0; border-top: 1px dashed #eee; font-size: 12px; }
-    td[data-label]::before { content: attr(data-label); flex: none; width: 58px; color: #999; }
+    td[data-label]::before { content: attr(data-label); flex: none; width: 96px; color: #999; }
     td.note { margin-top: 10px; }
     td.memo:empty { display: none; }
-    td.date { color: #666; }
     td.url a { display: inline; color: #3355ff; }
+    td.desc, td.dep { width: auto; }
+    td.dep:empty { display: none; }
+    td.dep > .dep { flex: 1; min-width: 0; }
+    .dep dl { grid-template-columns: 56px 1fr; }
+    td.status .st { flex: none; align-self: flex-start; }
+    td.status .st-note { margin-top: 2px; }
     .empty { padding: 30px 0; text-align: center !important; }
   }
 </style>
@@ -99,36 +161,57 @@
 <body>
 
 <header class="top">
-  <h1><img src="https://ecimg.cafe24img.com/pg2766b24144276030/etlandmall/logo-new03.png" alt="노바딜"><small>퍼블리싱 산출물 / skin-skin15</small></h1>
-  <p>전체 가이드 및 화면리스트</p>
+  <div>
+    <h1><img src="https://ecimg.cafe24img.com/pg2766b24144276030/etlandmall/logo-new03.png" alt="NOVADEAL">퍼블리싱 산출물 명세서</h1>
+    <p class="sub"><b>화면 구성 및 소스 파일 관리 목록</b>본 문서는 노바딜 쇼핑몰의 퍼블리싱 산출물에 대한 화면 구성, 소스 파일별 역할 및 의존 관계를 정리한 문서로, 향후 서비스 운영 및 유지보수를 위한 참고 자료입니다.</p>
+  </div>
+  <dl class="doc-meta">
+    <div><dt>프로젝트</dt><dd>노바딜 독립몰 구축</dd></div>
+    <div><dt>작성일</dt><dd>2026.11.26</dd></div>
+    <div><dt>구축사</dt><dd>AISoul</dd></div>
+    <div><dt>운영 스킨</dt><dd>skin15</dd></div>
+    <div><dt>개발 스킨</dt><dd>skin6</dd></div>
+  </dl>
 </header>
 
 <div class="sticky-bar">
-<nav class="tabs" id="tabs"></nav>
+<div class="tabs-row">
+  <nav class="tabs" id="tabs"></nav>
+  <button type="button" class="tools-toggle" id="toolsToggle" aria-expanded="false" aria-controls="tools">검색·필터 <b id="countM">0</b><i></i></button>
+</div>
 
-<div class="tools">
+<div class="tools" id="tools">
   <div class="server" id="server">
-    <button type="button" class="on" data-server="live">운영서버</button>
-    <button type="button" data-server="dev">데브서버</button>
+    <button type="button" class="on" data-server="live">운영 서버</button>
+    <button type="button" data-server="dev">개발 서버</button>
   </div>
+  <span class="root">스킨 기준 경로<b id="root">/skin15/</b></span>
+  <span class="select-wrap" id="stWrap"><select id="st"><option value="">노출 상태 전체</option></select></span>
   <input type="search" id="q" placeholder="파일명, 메뉴명 검색...">
-  <span class="count">Count<b id="count">0</b></span>
+  <span class="count">검색 결과<b id="count">0</b>건</span>
 </div>
 </div>
 
 <div class="wrap">
+  <div class="st-legend" id="stLegend"><strong>노출 상태</strong></div>
   <table>
     <thead>
       <tr>
-        <th rowspan="2">Num</th>
-        <th colspan="3">DEPTH</th>
-        <th rowspan="2">파일 경로</th>
-        <th rowspan="2">Date</th>
-        <th rowspan="2">구분</th>
-        <th rowspan="2">URL</th>
-        <th rowspan="2">비고</th>
+        <th rowspan="2">No.</th>
+        <th colspan="3">화면 및 기능 분류</th>
+        <th rowspan="2">소스 파일 경로</th>
+        <th rowspan="2">주요 기능 및 역할</th>
+        <th rowspan="2">적용 위치 및 의존 파일
+          <div class="dep-legend"><span>pages · aisoul</span><span class="cafe">카페24 스킨</span><span class="all">레이아웃 공통</span></div>
+        </th>
+        <th rowspan="2">파일 유형
+          <div class="type-legend"><p><span class="badge page">화면</span>주소로 직접 여는 페이지</p><p><span class="badge inc">공통 모듈</span>다른 화면에 @import 되는 조각</p></div>
+        </th>
+        <th rowspan="2">노출 상태 / 확인 조건</th>
+        <th rowspan="2">화면 확인</th>
+        <th rowspan="2">참고 및 유의사항</th>
       </tr>
-      <tr><th>1depth</th><th>2depth</th><th>3depth</th></tr>
+      <tr><th>대분류</th><th>중분류</th><th>소분류</th></tr>
     </thead>
     <tbody id="list"></tbody>
   </table>
@@ -136,10 +219,12 @@
 
 <script>
 // group: 탭 / type: page = 레이아웃이 붙는 화면, inc = 다른 화면에 import 되는 조각
-var D = '2026-11-26';
 var SERVERS = { live: 'https://novadeal.co.kr/', dev: 'https://novadealdev.cafe24.com/' };
 var BASE = SERVERS.live;
-// 데브서버에서 번호가 다른 주소
+// 서버별 스킨 루트 경로 — 모든 파일 경로는 이 폴더 기준
+var ROOTS = { live: '/skin15/', dev: '/skin6/' };
+var ROOT = ROOTS.live;
+// 개발 서버에서 번호가 다른 주소
 var DEV_PATH = {
   'product/list.html?cate_no=70': 'product/list.html?cate_no=154',
   'product/detail.html?product_no=852': 'product/detail.html?product_no=83'
@@ -154,10 +239,106 @@ function link(path) { return BASE + (BASE === SERVERS.dev && DEV_PATH[path] || p
 [].forEach.call(document.querySelectorAll('#server button'), function (b) {
   b.onclick = function () {
     BASE = SERVERS[b.dataset.server];
+    ROOT = ROOTS[b.dataset.server];
+    document.getElementById('root').textContent = ROOT;
     [].forEach.call(b.parentNode.children, function (x) { x.className = x === b ? 'on' : ''; });
     render();
   };
 });
+// 연결 정보 — data/skin15(카페24 스킨) + pages + index.html의 @layout/@css/@js/@import 지시문에서 추출
+// by: 이 파일을 불러오는 곳 / layout: 쓰는 레이아웃 / css·js·imp: 이 파일이 불러오는 aisoul·pages 파일 / etc: 그 외 카페24 CSS·JS 개수
+var DEP = {"index.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css"],"js":["aisoul/assets/js/front/main_hotdeal.js","aisoul/assets/js/front/main_promotions.js","aisoul/assets/js/front/main_mdpick.js"],"imp":["pages/main/mainVisual.html","pages/main/ai_search_area.html","pages/main/mainQuick.html","pages/main/mainTimedeal.html","pages/main/mainMdPick.html","pages/main/mainBanner01.html","pages/main/ai_suggestion_area.html","pages/main/mainPromo.html","pages/main/mainBanner02.html","pages/main/mainPromo02.html","pages/main/mainReview.html","pages/main/mainPromoLast.html"],"etc":1},"pages/closed/closed-entry.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/employee_email.css"],"js":["aisoul/assets/js/front/closed_mall.js"]},"pages/closed/closed-main.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css"],"js":["aisoul/assets/js/front/closed_mall.js"]},"pages/components/prod_filter.html":{"by":["pages/sub/product_search.html","product/list.html"]},"pages/employee/employee-email-auth-complete.html":{"layout":["pages/layout/employee_layout.html"],"css":["aisoul/assets/css/pages/employee_email.css"],"js":["aisoul/assets/js/front/employee_auth.js"]},"pages/employee/employee-email-auth-expire.html":{"layout":["pages/layout/employee_layout.html"],"css":["aisoul/assets/css/pages/employee_email.css"],"js":["aisoul/assets/js/front/employee_auth.js"]},"pages/employee/employee-email-auth-sent.html":{"layout":["pages/layout/employee_layout.html"],"css":["aisoul/assets/css/pages/employee_email.css"],"js":["aisoul/assets/js/front/employee_auth.js"]},"pages/employee/employee-email-auth.html":{"layout":["pages/layout/employee_layout.html"],"css":["aisoul/assets/css/pages/employee_email.css"],"js":["aisoul/assets/js/front/employee_auth.js"]},"pages/employee/employee-entry.html":{"layout":["pages/layout/employee_layout.html"],"js":["aisoul/assets/js/front/employee_auth.js"]},"pages/employee/employee-form-mail.html":{},"pages/employee/employee-mypage.html":{"layout":["pages/layout/employee_layout.html"],"etc":2},"pages/layout/employee_layout.html":{"by":["pages/employee/employee-email-auth-complete.html","pages/employee/employee-email-auth-expire.html","pages/employee/employee-email-auth-sent.html","pages/employee/employee-email-auth.html","pages/employee/employee-entry.html","pages/employee/employee-mypage.html","pages/main/employee_main.html"],"css":["aisoul/assets/css/base/reset.css","aisoul/assets/css/base/common.css","aisoul/assets/css/base/variables.css","aisoul/assets/css/base/utility.css","aisoul/assets/css/components/button.css","aisoul/assets/css/components/input.css","aisoul/assets/css/components/tab.css","aisoul/assets/css/components/board.css","aisoul/assets/css/components/products.css","aisoul/assets/css/components/modal.css","aisoul/assets/css/components/pagenation.css","aisoul/assets/css/components/myshop.css","aisoul/assets/css/components/member.css","aisoul/assets/css/components/basket.css","aisoul/assets/css/components/quantity.css","aisoul/assets/css/components/project.css","aisoul/assets/css/components/visual.css","aisoul/assets/css/layout/header.css","aisoul/assets/css/layout/footer.css","aisoul/assets/css/front/common.css"],"js":["aisoul/assets/js/base/common.js","aisoul/assets/js/base/horizontal_scroll_arrow.js","aisoul/assets/js/components/product.js","aisoul/assets/js/components/slide.js","aisoul/assets/js/components/tab.js","aisoul/assets/js/components/member.js","aisoul/assets/js/components/layout.js","aisoul/assets/js/components/modal.js","aisoul/assets/js/components/dropdown.js","aisoul/assets/js/components/basket.js","aisoul/assets/js/components/lnb.js","aisoul/assets/js/components/filter.js","aisoul/assets/js/components/project.js","aisoul/assets/js/components/myshop.js","aisoul/assets/js/components/sale.js","aisoul/assets/js/pages/main.js","aisoul/assets/js/front/config.js","aisoul/assets/js/front/auth.js","aisoul/assets/js/front/core.js","aisoul/assets/js/front/family_site.js","aisoul/assets/js/front/employee_auth.js"],"imp":["pages/layout/header/employee_header.html","pages/layout/footer/footer_type01.html"],"etc":29},"pages/layout/footer/footer_type01.html":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"],"js":["aisoul/assets/js/front/clause.js"],"etc":2},"pages/layout/header/board_header.html":{"by":["board/free/list.html","board/free/modify.html","board/free/read.html","board/free/write.html","board/product/list.html","board/product/modify.html","board/product/read.html","board/product/write.html"]},"pages/layout/header/employee_header.html":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"],"js":["aisoul/assets/js/components/category_type_employee.js"],"etc":1},"pages/layout/header/header_type02.html":{"by":["layout/basic/layout.html","layout/basic/layout_project.html"],"js":["aisoul/assets/js/components/category_type01.js"],"etc":1},"pages/layout/header/logo_header.html":{},"pages/layout/header/prod_detail_header.html":{"by":["product/detail.html"]},"pages/layout/header/prod_header.html":{"by":["product/list.html"]},"pages/layout/header/sub_header.html":{},"pages/main/ai_products_area.html":{"imp":["pages/components/ai_product_component.html"]},"pages/main/ai_search_area.html":{"by":["index.html"]},"pages/main/ai_suggestion_area.html":{"by":["index.html"]},"pages/main/employee_main.html":{"layout":["pages/layout/employee_layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/pages/employee_main.css","aisoul/assets/css/pages/sub_main.css"],"js":["aisoul/assets/js/front/employee_auth.js","aisoul/assets/js/front/sub_main.js","aisoul/assets/js/front/main_mdpick.js"],"etc":1},"pages/main/mainBanner01.html":{"by":["index.html"]},"pages/main/mainBanner02.html":{"by":["index.html"]},"pages/main/mainMdPick.html":{"by":["index.html"]},"pages/main/mainPromo.html":{"by":["index.html"]},"pages/main/mainPromo02.html":{"by":["index.html"]},"pages/main/mainPromoLast.html":{"by":["index.html"]},"pages/main/mainQuick.html":{"by":["index.html"]},"pages/main/mainReview.html":{"by":["index.html"]},"pages/main/mainTimedeal.html":{"by":["index.html"]},"pages/main/mainVisual.html":{"by":["index.html"]},"pages/private-shop/secret_code_page.html":{"css":["aisoul/assets/css/base/reset.css","aisoul/assets/css/base/common.css","aisoul/assets/css/base/variables.css","aisoul/assets/css/base/utility.css","aisoul/assets/css/components/button.css","aisoul/assets/css/components/input.css","aisoul/assets/css/components/private_shop.css"]},"pages/promotion/event_preview.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/components/project.css"],"js":["aisoul/assets/js/front/event_read.js"],"imp":["pages/promotion/event_read_body.html"]},"pages/promotion/event_read.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/components/project.css"],"js":["aisoul/assets/js/front/event_read.js"],"imp":["pages/promotion/event_read_body.html"]},"pages/promotion/event_read_body.html":{"by":["pages/promotion/event_preview.html","pages/promotion/event_read.html"]},"pages/promotion/multi_discount_guide.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/components/promo.css"],"js":["aisoul/assets/js/components/promo.js","aisoul/assets/js/front/multi_discount_guide.js"]},"pages/promotion/multi_discount_shop.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/components/promo.css"],"js":["aisoul/assets/js/components/promo.js","aisoul/assets/js/front/multi_discount_shop.js"]},"pages/promotion/project_detail.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css"],"js":["aisoul/assets/js/front/promotion_detail.js"],"imp":["pages/promotion/project_detail_body.html"]},"pages/promotion/project_detail_body.html":{"by":["pages/promotion/project_detail.html","pages/promotion/project_preview.html"]},"pages/promotion/project_list.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css"],"js":["aisoul/assets/js/front/promotion_list.js"]},"pages/promotion/project_preview.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css"],"js":["aisoul/assets/js/front/promotion_detail.js"],"imp":["pages/promotion/project_detail_body.html"]},"pages/promotion/promo_timedeal.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/components/promo.css"],"js":["aisoul/assets/js/front/promo_timedeal_list.js"]},"pages/sub/ai_search.html":{"layout":["layout/basic/layout.html"]},"pages/sub/ai_search_component.html":{"by":["pages/sub/depth1_sub_main.html","pages/sub/depth2_sub_main.html","pages/sub/depth3_sub_main.html","pages/sub/depth4_sub_main.html","pages/sub/depth5_sub_main.html"]},"pages/sub/depth1_sub_main.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/pages/sub_main.css"],"js":["aisoul/assets/js/front/sub_main.js","aisoul/assets/js/front/main_mdpick.js"],"imp":["pages/sub/ai_search_component.html"],"etc":1},"pages/sub/depth2_sub_main.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/pages/sub_main.css"],"js":["aisoul/assets/js/front/sub_main.js","aisoul/assets/js/front/main_mdpick.js"],"imp":["pages/sub/ai_search_component.html"],"etc":1},"pages/sub/depth3_sub_main.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/pages/sub_main.css"],"js":["aisoul/assets/js/front/sub_main.js","aisoul/assets/js/front/main_mdpick.js"],"imp":["pages/sub/ai_search_component.html"],"etc":1},"pages/sub/depth4_sub_main.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/pages/sub_main.css"],"js":["aisoul/assets/js/front/sub_main.js","aisoul/assets/js/front/main_mdpick.js"],"imp":["pages/sub/ai_search_component.html"],"etc":1},"pages/sub/depth5_sub_main.html":{"layout":["layout/basic/layout.html"],"css":["aisoul/assets/css/pages/main.css","aisoul/assets/css/pages/sub_main.css"],"js":["aisoul/assets/js/front/sub_main.js","aisoul/assets/js/front/main_mdpick.js"],"imp":["pages/sub/ai_search_component.html"],"etc":1},"pages/sub/product_search.html":{"layout":["layout/basic/layout.html"],"js":["aisoul/assets/js/front/product_list.js"],"imp":["pages/components/prod_filter.html"],"etc":4},"aisoul/assets/js/components/faq.js":{"by":["board/free/list.html"]},"aisoul/assets/css/pages/main.css":{"by":["index.html","pages/closed/closed-main.html","pages/main/employee_main.html","pages/promotion/event_preview.html","pages/promotion/event_read.html","pages/promotion/multi_discount_guide.html","pages/promotion/multi_discount_shop.html","pages/promotion/project_detail.html","pages/promotion/project_list.html","pages/promotion/project_preview.html","pages/sub/depth1_sub_main.html","pages/sub/depth2_sub_main.html","pages/sub/depth3_sub_main.html","pages/sub/depth4_sub_main.html","pages/sub/depth5_sub_main.html"]},"aisoul/assets/js/front/main_hotdeal.js":{"by":["index.html"]},"aisoul/assets/js/front/main_promotions.js":{"by":["index.html"]},"aisoul/assets/js/front/main_mdpick.js":{"by":["index.html","pages/main/employee_main.html","pages/sub/depth1_sub_main.html","pages/sub/depth2_sub_main.html","pages/sub/depth3_sub_main.html","pages/sub/depth4_sub_main.html","pages/sub/depth5_sub_main.html"]},"aisoul/assets/js/components/category_type_employee.js":{"by":["layout/basic/employee_header.html","pages/layout/header/employee_header.html"]},"aisoul/assets/js/pages/intro-member.js":{"by":["layout/basic/intro.html"]},"aisoul/assets/css/base/reset.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html","pages/private-shop/secret_code_page.html"]},"aisoul/assets/css/base/common.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html","pages/private-shop/secret_code_page.html"]},"aisoul/assets/css/base/variables.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html","pages/private-shop/secret_code_page.html"]},"aisoul/assets/css/base/utility.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html","pages/private-shop/secret_code_page.html"]},"aisoul/assets/css/components/button.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html","pages/private-shop/secret_code_page.html","product/basket_option.html"]},"aisoul/assets/css/components/input.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html","pages/private-shop/secret_code_page.html"]},"aisoul/assets/css/components/tab.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/board.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/products.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","order/order_result.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/modal.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/table.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html"]},"aisoul/assets/css/components/pagenation.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/myshop.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/member.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/basket.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/quantity.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/components/project.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html","pages/promotion/event_preview.html","pages/promotion/event_read.html"]},"aisoul/assets/css/components/visual.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/layout/header.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/layout/footer.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/css/front/common.css":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/base/common.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/base/horizontal_scroll_arrow.js":{"by":["layout/basic/layout.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/product.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/slide.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/tab.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/board.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html"]},"aisoul/assets/js/components/member.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/layout.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/modal.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/dropdown.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/basket.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/lnb.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/filter.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/project.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/myshop.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/components/pagenation.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html"]},"aisoul/assets/js/components/sale.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/main.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/pages/main.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","layout/basic/popup.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/front/config.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","order/orderform.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/front/auth.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","order/orderform.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/front/core.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/front/family_site.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html","pages/layout/employee_layout.html"]},"aisoul/assets/js/front/package_state.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html"]},"aisoul/assets/js/components/password_toggle.js":{"by":["layout/basic/layout.html","layout/basic/layout_project.html"]},"aisoul/assets/js/components/main.js":{"by":["layout/basic/main.html"]},"aisoul/assets/css/components/option.css":{"by":["layout/basic/popup.html"]},"aisoul/assets/css/components/promo.css":{"by":["layout/basic/popup.html","pages/promotion/multi_discount_guide.html","pages/promotion/multi_discount_shop.html","pages/promotion/promo_timedeal.html"]},"aisoul/assets/css/pages/sub_main.css":{"by":["layout/basic/popup.html","pages/main/employee_main.html","pages/sub/depth1_sub_main.html","pages/sub/depth2_sub_main.html","pages/sub/depth3_sub_main.html","pages/sub/depth4_sub_main.html","pages/sub/depth5_sub_main.html"]},"aisoul/assets/js/front/check_password.js":{"by":["member/check_password.html","member/modify.html","myshop/withdraw/withdraw.html"]},"aisoul/assets/js/front/clause.js":{"by":["member/mall_agreement.html","member/privacy.html","pages/layout/footer/footer_type01.html"]},"aisoul/assets/js/front/member_modify.js":{"by":["member/modify.html"]},"aisoul/assets/js/front/point_history.js":{"by":["myshop/mileage/pointList.html","myshop/point/pointList.html"]},"aisoul/assets/js/front/orderform_additional.js":{"by":["myshop/order/detail.html","order/order_result.html","order/orderform.html"]},"aisoul/assets/js/front/order_refund.js":{"by":["myshop/order/detail.html"]},"aisoul/assets/css/components/order.css":{"by":["myshop/order/exchange.html","myshop/order/return.html","order/order_result.html"]},"aisoul/assets/js/front/password_change.js":{"by":["myshop/password_change.html"]},"aisoul/assets/js/front/withdraw.js":{"by":["myshop/withdraw/withdraw.html"]},"aisoul/assets/js/front/basket.js":{"by":["order/basket.html"]},"aisoul/assets/js/front/etland_point.js":{"by":["order/orderform.html"]},"aisoul/assets/js/front/orderform_loading.js":{"by":["order/orderform.html"]},"aisoul/assets/js/components/order.js":{"by":["order/order_result.html"]},"aisoul/assets/js/components/prod_detail.js":{"by":["product/detail.html"]},"aisoul/assets/js/front/product_detail.js":{"by":["product/detail.html"]},"aisoul/assets/js/front/product_list.js":{"by":["pages/sub/product_search.html","product/list.html"]},"aisoul/assets/css/pages/employee_email.css":{"by":["pages/closed/closed-entry.html","pages/employee/employee-email-auth-complete.html","pages/employee/employee-email-auth-expire.html","pages/employee/employee-email-auth-sent.html","pages/employee/employee-email-auth.html"]},"aisoul/assets/js/front/closed_mall.js":{"by":["pages/closed/closed-entry.html","pages/closed/closed-main.html"]},"aisoul/assets/js/front/employee_auth.js":{"by":["pages/employee/employee-email-auth-complete.html","pages/employee/employee-email-auth-expire.html","pages/employee/employee-email-auth-sent.html","pages/employee/employee-email-auth.html","pages/employee/employee-entry.html","pages/layout/employee_layout.html","pages/main/employee_main.html"]},"aisoul/assets/js/components/category_type01.js":{"by":["pages/layout/header/header_type02.html"]},"aisoul/assets/css/pages/employee_main.css":{"by":["pages/main/employee_main.html"]},"aisoul/assets/js/front/sub_main.js":{"by":["pages/main/employee_main.html","pages/sub/depth1_sub_main.html","pages/sub/depth2_sub_main.html","pages/sub/depth3_sub_main.html","pages/sub/depth4_sub_main.html","pages/sub/depth5_sub_main.html"]},"aisoul/assets/css/components/private_shop.css":{"by":["pages/private-shop/secret_code_page.html"]},"aisoul/assets/js/front/event_read.js":{"by":["pages/promotion/event_preview.html","pages/promotion/event_read.html"]},"aisoul/assets/js/components/promo.js":{"by":["pages/promotion/multi_discount_guide.html","pages/promotion/multi_discount_shop.html"]},"aisoul/assets/js/front/multi_discount_guide.js":{"by":["pages/promotion/multi_discount_guide.html"]},"aisoul/assets/js/front/multi_discount_shop.js":{"by":["pages/promotion/multi_discount_shop.html"]},"aisoul/assets/js/front/promotion_detail.js":{"by":["pages/promotion/project_detail.html","pages/promotion/project_preview.html"]},"aisoul/assets/js/front/promotion_list.js":{"by":["pages/promotion/project_list.html"]},"aisoul/assets/js/front/promo_timedeal_list.js":{"by":["pages/promotion/promo_timedeal.html"]}};
+var ASSET_ROWS = [
+  ["CSS","base","reset.css","","index.html","css","aisoul/assets/css/base/reset.css","","브라우저 기본 스타일 초기화 + 페이지 로딩 표시(.page-loading, .is-loading)"],
+  ["CSS","base","common.css","","index.html","css","aisoul/assets/css/base/common.css","","사이트 공통 스타일 — 경로(path)·타이틀 영역, 카페24 기본 뒤로가기 숨김, 공통 플로팅 버튼(TOP·공유하기), 팝업"],
+  ["CSS","base","variables.css","","index.html","css","aisoul/assets/css/base/variables.css","",":root CSS 변수(색상·폰트 등) 모음"],
+  ["CSS","base","utility.css","","index.html","css","aisoul/assets/css/base/utility.css","","자주 쓰는 유틸 클래스 — .flex, margin·padding, .text-center, 컨테이너(.inner) 폭, 그리드, 텍스트 크기"],
+  ["CSS","components","alpha_review_style_backup.css","","","css","aisoul/assets/css/components/alpha_review_style_backup.css","","알파리뷰 위젯 스타일 백업본"],
+  ["CSS","components","basket.css","","index.html","css","aisoul/assets/css/components/basket.css","","장바구니 — 타이틀, 전체선택/선택삭제, 수량 변경, 하단 sticky 결제 영역, 상품 혜택 구분 박스(일반/다품목할인)"],
+  ["CSS","components","board.css","","index.html","css","aisoul/assets/css/components/board.css","","게시판 — 리스트·읽기·댓글, 하단 버튼·검색, 정렬, 페이지네이션"],
+  ["CSS","components","button.css","","index.html","css","aisoul/assets/css/components/button.css","","버튼 공통 — btnNormal/btnSubmit, sizeS/M/L, 하단 고정형(Fix), 닫기 버튼"],
+  ["CSS","components","input.css","","index.html","css","aisoul/assets/css/components/input.css","","입력 요소 — 텍스트 입력, 체크박스/라디오, 커스텀 셀렉트(.custom-select), disabled"],
+  ["CSS","components","member.css","","index.html","css","aisoul/assets/css/components/member.css","","회원 — 통합 로그인, 로그인 완료, 비회원 주문조회, 회원가입 약관, 아이디/비밀번호 찾기"],
+  ["CSS","components","modal.css","","index.html","css","aisoul/assets/css/components/modal.css","","모달 공통 + 이용약관 모달, 장바구니 담기 팝업, 옵션 변경 레이어"],
+  ["CSS","components","myshop.css","","index.html","css","aisoul/assets/css/components/myshop.css","","마이페이지 — 공통 탭, 인포, 메뉴바, 주문조회, 배송 주소록, 회원정보 수정, 탈퇴, 예치금"],
+  ["CSS","components","option.css","","index.html","css","aisoul/assets/css/components/option.css","","상품 옵션 선택 레이어 — 옵션 선택 후 추가되는 상품(상품명·옵션·수량·삭제·가격)"],
+  ["CSS","components","order.css","","myshop/order/exchange.html","css","aisoul/assets/css/components/order.css","","주문완료 페이지, 교환/반품 신청 페이지"],
+  ["CSS","components","pagenation.css","","index.html","css","aisoul/assets/css/components/pagenation.css","","페이지네이션 화살표 아이콘(처음/이전/다음/마지막) 교체"],
+  ["CSS","components","private_shop.css","","pages/private-shop/secret_code_page.html","css","aisoul/assets/css/components/private_shop.css","","시크릿 코드 입력(폐쇄몰 게이트) 페이지 배경·레이아웃"],
+  ["CSS","components","products.css","","index.html","css","aisoul/assets/css/components/products.css","","상품 관련 메인 스타일(2,200줄) — 상품 카드(가로/세로형), 위시·장바구니 호버 아이콘, 상품 LNB, 상품 상세(옵션·가격·구매 sticky), 프로모션 영역"],
+  ["CSS","components","project.css","","index.html","css","aisoul/assets/css/components/project.css","","기획전/이벤트 — 리스트, 상세(타이틀, 남은 시간 카운트다운, 테마 글, 쿠폰, 탭 메뉴, 공유 팝업)"],
+  ["CSS","components","promo.css","","index.html","css","aisoul/assets/css/components/promo.css","","타임핫딜 + 다품목 할인관(혜택 안내, 타임라인, 패키지 카드, 쇼핑 카트·카테고리, 유의사항)"],
+  ["CSS","components","quantity.css","","index.html","css","aisoul/assets/css/components/quantity.css","","수량 증감 버튼(.ec-base-qty up/down) 아이콘"],
+  ["CSS","components","tab.css","","index.html","css","aisoul/assets/css/components/tab.css","","공통 탭(.tab-menu / .tab-contents) 활성 상태"],
+  ["CSS","components","visual.css","","index.html","css","aisoul/assets/css/components/visual.css","","메인 비주얼 배너 슬라이드 — 센터모드, 화살표, 프로그레스 바"],
+  ["CSS","front","common.css","","index.html","css","aisoul/assets/css/front/common.css","","프론트(API 연동) 공통 — 데이터 로딩 전 스켈레톤, 빈 목록/오류 상태, 숨김 처리, 장바구니 그룹·임직원/폐쇄몰 진입 화면 등 JS가 그리는 화면"],
+  ["CSS","layout","header.css","","index.html","css","aisoul/assets/css/layout/header.css","","헤더 — 2단 헤더(header-type02), 1단 헤더, 스크롤 고정, 전체 카테고리 메가메뉴, 모바일 카테고리·하단 내비, 서브 헤더"],
+  ["CSS","layout","footer.css","","index.html","css","aisoul/assets/css/layout/footer.css","","푸터 type01 — 고객센터, 회사 정보, 메뉴, FAMILY SITE"],
+  ["CSS","pages","employee_email.css","","pages/closed/closed-entry.html","css","aisoul/assets/css/pages/employee_email.css","","임직원 이메일 인증 화면(요청/발송/완료/만료) + 폐쇄몰 진입 화면 — 헤더 및 버튼 UI 스타일 정의"],
+  ["CSS","pages","employee_main.css","","pages/main/employee_main.html","css","aisoul/assets/css/pages/employee_main.css","","임직원몰 메인 로고 영역(로고 + 구분선 + 텍스트)"],
+  ["CSS","pages","main.css","","index.html","css","aisoul/assets/css/pages/main.css","","메인 섹션 스타일 — 섹션 타이틀, 슬라이드 공통, 퀵메뉴, 기획전(promo/promo02), 이벤트 배너, 상품 리스트. 서브메인·기획전·이벤트·다품목·폐쇄몰에서도 공용"],
+  ["CSS","pages","sub_main.css","","index.html","css","aisoul/assets/css/pages/sub_main.css","","카테고리 서브메인 — 비주얼 배너, 서브 배너, 탭 영역, 타임딜 슬라이드, 상품 영역 (임직원몰 메인도 사용)"],
+  ["JS","base","common.js","","index.html","js","aisoul/assets/js/base/common.js","","공통 — 카페24 data-ez 속성 제거, 회원 영역 최소 높이, 링크 없는 배너 클릭 막기, 공통 플로팅 버튼(TOP·공유하기·링크 복사 토스트)"],
+  ["JS","base","horizontal_scroll_arrow.js","","index.html","js","aisoul/assets/js/base/horizontal_scroll_arrow.js","","가로 스크롤 영역을 찾아 좌우 화살표를 자동 생성하고 상태 갱신"],
+  ["JS","components","basket.js","","index.html","js","aisoul/assets/js/components/basket.js","","장바구니 — 수량 변경(변경 버튼으로만 반영), 1080px 이하 최종 금액 위치 이동, 옵션 변경 레이어, 커스텀 셀렉트, 안내 드롭다운"],
+  ["JS","components","board.js","","index.html","js","aisoul/assets/js/components/board.js","","게시판 — 모바일 비밀글 아이콘 위치, FAQ 탭 스크롤 클래스, 공지만 있을 때 \"게시글 없음\" 숨김"],
+  ["JS","components","category_type01.js","","index.html","js","aisoul/assets/js/components/category_type01.js","","일반 헤더 카테고리 — 전체 카테고리 메가메뉴, 모바일 카테고리 레이어, 상품 리스트 LNB, 서브메인 탭 (카테고리 API)"],
+  ["JS","components","category_type_employee.js","","index.html","js","aisoul/assets/js/components/category_type_employee.js","","임직원 헤더 카테고리 — category_type01의 임직원몰 버전(\"홈\" 분류 제외, 서브메인 없음)"],
+  ["JS","components","dropdown.js","","index.html","js","aisoul/assets/js/components/dropdown.js","","select를 커스텀 셀렉트(.custom-select)로 변환 (상품상세 옵션은 제외)"],
+  ["JS","components","faq.js","","board/free/list.html","js","aisoul/assets/js/components/faq.js","","FAQ 게시판 — 카테고리 탭, 아코디언, 답변 불러오기"],
+  ["JS","components","filter.js","","index.html","js","aisoul/assets/js/components/filter.js","","상품 필터 — 필터 모달·탭 열기/닫기, 칩, 초기화, 필터 탭 드래그 가로 스크롤"],
+  ["JS","components","layout.js","","index.html","js","aisoul/assets/js/components/layout.js","","레이아웃 — 페이지 로딩, 헤더 스크롤 고정, 검색 placeholder, 현재 카테고리 활성화, 헤더 높이 계산, 푸터 여백, 장바구니 배지 수"],
+  ["JS","components","lnb.js","","index.html","js","aisoul/assets/js/components/lnb.js","","추후 기능 분리가 필요할 수 있어 파일만 만들어 둠 (레이아웃에서 호출)"],
+  ["JS","components","main.js","","index.html","js","aisoul/assets/js/components/main.js","","추후 기능 분리가 필요할 수 있어 파일만 만들어 둠 (레이아웃에서 호출)"],
+  ["JS","components","sale.js","","index.html","js","aisoul/assets/js/components/sale.js","","추후 기능 분리가 필요할 수 있어 파일만 만들어 둠 (레이아웃에서 호출). 현재 세일(할인가) 로직은 코드 효율을 위해 aisoul/assets/js/components/product.js에 포함 — 상품 상세 할인가·할인율·최대혜택가 계산(setProductDetailInfo, 159줄~), 수량 변경 시 할인가 합계(updateSalePrice, 985줄~)"],
+  ["JS","components","member.js","","index.html","js","aisoul/assets/js/components/member.js","","회원 — 회원가입 약관 \"필수/선택\" 표기 정리, 주소 검색 버튼 묶기, 탈퇴 버튼 상태"],
+  ["JS","components","modal.js","","index.html","js","aisoul/assets/js/components/modal.js","",".modal 열기 및 배경 영역·닫기 버튼 클릭 시 모달 종료"],
+  ["JS","components","myshop.js","","index.html","js","aisoul/assets/js/components/myshop.js","","마이페이지 — 배송 주소록 모바일 DOM, 주문 옵션 팝업, 주문 레이어 위치, 회원정보 수정 필드"],
+  ["JS","components","order.js","","order/order_result.html","js","aisoul/assets/js/components/order.js","","주문완료 페이지 — 주문번호 라벨/번호 분리 표시"],
+  ["JS","components","pagenation.js","","index.html","js","aisoul/assets/js/components/pagenation.js","","카페24 페이지네이션 UI 및 노출 조건 제어 — 처음/끝 버튼은 10페이지 초과일 때만 노출, 비활성 처리"],
+  ["JS","components","password_toggle.js","","index.html","js","aisoul/assets/js/components/password_toggle.js","","로그인·비밀번호 확인·비밀번호 변경 입력칸에 비밀번호 보기/숨기기(눈 아이콘) 추가"],
+  ["JS","components","product.js","","index.html","js","aisoul/assets/js/components/product.js","","상품 공통 — 상세 이미지 슬라이드, 리스트 위시·장바구니 아이콘, 상세 정보·배송 박스 배치, 가격·총액 표기, 타임딜 라벨, 커스텀 옵션"],
+  ["JS","components","prod_detail.js","","product/detail.html","js","aisoul/assets/js/components/prod_detail.js","","상품상세 — 상세 더보기, 상품문의 표 정리(비밀글 아이콘·모바일 정보), 간단 리뷰, 위시 아이콘, 슬라이드 카운트, 구매 sticky"],
+  ["JS","components","project.js","","index.html","js","aisoul/assets/js/components/project.js","","타임딜 상품 리스트 반응형 감싸기, 기획전 탭 메뉴 상단 고정"],
+  ["JS","components","promo.js","","pages/promotion/multi_discount_guide.html","js","aisoul/assets/js/components/promo.js","","다품목 할인관 — 상품 선택 영역 스크롤 고정 처리, 카테고리 화살표"],
+  ["JS","components","slide.js","","index.html","js","aisoul/assets/js/components/slide.js","","Swiper 슬라이드 공통 초기화(메인/서브 배너, 상품 슬라이드, 기획전·쿠폰 슬라이드) + 프로그레스 바"],
+  ["JS","components","tab.js","","index.html","js","aisoul/assets/js/components/tab.js","",".tab-wrap 공통 탭 전환"],
+  ["JS","front","auth.js","","index.html","js","aisoul/assets/js/front/auth.js","","통합로그인(SSO) 토큰을 읽어 API Authorization에 붙이고 만료 시 갱신"],
+  ["JS","front","basket.js","","order/basket.html","js","aisoul/assets/js/front/basket.js","","장바구니 API 연동 — 상품 그룹 분리(일반/다품목/공급사/임직원), 사은품 연결 상품, 금액 계산"],
+  ["JS","front","check_password.js","","member/check_password.html","js","aisoul/assets/js/front/check_password.js","","회원정보 접근을 위한 비밀번호 확인 절차(회원정보 수정·탈퇴 전) 및 SNS 간편 인증"],
+  ["JS","front","clause.js","","index.html","js","aisoul/assets/js/front/clause.js","","약관 API로 이용약관/개인정보처리방침 본문 표시 (약관 페이지 + 푸터 모달)"],
+  ["JS","front","closed_entry.js","","","js","aisoul/assets/js/front/closed_entry.js","","폐쇄몰 브릿지 (이전 버전, closed_mall.js가 대체)"],
+  ["JS","front","closed_mall.js","","pages/closed/closed-entry.html","js","aisoul/assets/js/front/closed_mall.js","","폐쇄몰 진입(보안코드 확인)·메인(배너/상품 목록) API 연동"],
+  ["JS","front","config.js","","index.html","js","aisoul/assets/js/front/config.js","","프론트 설정 — 도메인, 스킨 경로, 디버그 스위치, 카페24 셀렉터 모음"],
+  ["JS","front","core.js","","index.html","js","aisoul/assets/js/front/core.js","","프론트엔드 API 연동 및 공통 기능 관리 — 유틸, 카운트다운, API 클라이언트, 캐시, 토스트, 상품 카드 공통, 임직원 모드"],
+  ["JS","front","employee_auth.js","","index.html","js","aisoul/assets/js/front/employee_auth.js","","임직원몰 진입 판정·이메일 인증(발송/확인/만료)·접근 제어"],
+  ["JS","front","etland_point.js","","order/orderform.html","js","aisoul/assets/js/front/etland_point.js","","주문서 — 전자랜드 포인트 조회/적용 UI"],
+  ["JS","front","event_read.js","","pages/promotion/event_preview.html","js","aisoul/assets/js/front/event_read.js","","이벤트 상세/미리보기 — API 렌더, 날짜, 이전/다음 글, 공유"],
+  ["JS","front","family_site.js","","index.html","js","aisoul/assets/js/front/family_site.js","","푸터 FAMILY SITE — 임직원 인증 시 임직원몰 링크 노출, 여닫기"],
+  ["JS","front","main_hotdeal.js","","index.html","js","aisoul/assets/js/front/main_hotdeal.js","","메인 타임핫딜 — API 연동을 통한 상품 슬라이드 렌더링"],
+  ["JS","front","main_mdpick.js","","index.html","js","aisoul/assets/js/front/main_mdpick.js","","MD PICK 상품 — 메인/서브메인/임직원몰 메인 공용"],
+  ["JS","front","main_promotions.js","","index.html","js","aisoul/assets/js/front/main_promotions.js","","메인 기획전 영역 — 상단/하단 세로형, promo02 가로형"],
+  ["JS","front","member_modify.js","","member/modify.html","js","aisoul/assets/js/front/member_modify.js","","회원정보 수정 — 입력 제한, 수신 동의, SNS 연동 목록, 저장"],
+  ["JS","front","multi_discount_guide.js","","pages/promotion/multi_discount_guide.html","js","aisoul/assets/js/front/multi_discount_guide.js","","다품목 할인관 혜택 안내 — 혜택 영역, 패키지 카드 슬라이드"],
+  ["JS","front","multi_discount_shop.js","","pages/promotion/multi_discount_shop.html","js","aisoul/assets/js/front/multi_discount_shop.js","","다품목 할인관 쇼핑 — 상품 목록, 선택 카트, 혜택 계산 API"],
+  ["JS","front","orderform_additional.js","","myshop/order/detail.html","js","aisoul/assets/js/front/orderform_additional.js","","주문 추가입력의 MID·담당 MD 항목 UI 비노출 처리 (입력값·전송은 유지)"],
+  ["JS","front","orderform_loading.js","","order/orderform.html","js","aisoul/assets/js/front/orderform_loading.js","","주문서 — 할인 반영 전 로딩 화면"],
+  ["JS","front","order_refund.js","","myshop/order/detail.html","js","aisoul/assets/js/front/order_refund.js","","주문 상세 — 환불 금액 표기 보정(적립금 포함, 환불 전 안내)"],
+  ["JS","front","package_state.js","","index.html","js","aisoul/assets/js/front/package_state.js","","진행 중인 다품목 할인관 여부 확인 → 메뉴 숨김/홈 이동"],
+  ["JS","front","password_change.js","","myshop/password_change.html","js","aisoul/assets/js/front/password_change.js","","비밀번호 변경 — 단계, 검증, 변경 API"],
+  ["JS","front","point_history.js","","myshop/mileage/pointList.html","js","aisoul/assets/js/front/point_history.js","","포인트 요약/내역 — 탭, 페이지"],
+  ["JS","front","product_detail.js","","product/detail.html","js","aisoul/assets/js/front/product_detail.js","","상품상세 API 연동 — 타임핫딜 카운트다운, 상품정보고시, 스펙 탭, 쿠폰 받기, Q&A 쓰기 권한"],
+  ["JS","front","product_list.js","","pages/sub/product_search.html","js","aisoul/assets/js/front/product_list.js","","상품 리스트/검색 — 상품 API, 필터 UI, URL 쿼리 동기화, 임직원 모드"],
+  ["JS","front","promotion_detail.js","","pages/promotion/project_detail.html","js","aisoul/assets/js/front/promotion_detail.js","","기획전 상세/미리보기 — 렌더, 폐쇄몰·임직원 전용 접근 제어, 쿠폰"],
+  ["JS","front","promotion_list.js","","pages/promotion/project_list.html","js","aisoul/assets/js/front/promotion_list.js","","기획전·이벤트 리스트 — 탭, 카드, 페이지네이션"],
+  ["JS","front","promo_timedeal_list.js","","pages/promotion/promo_timedeal.html","js","aisoul/assets/js/front/promo_timedeal_list.js","","타임핫딜 페이지 — 카테고리 탭 + 상품 리스트"],
+  ["JS","front","sub_main.js","","pages/main/employee_main.html","js","aisoul/assets/js/front/sub_main.js","","카테고리 서브메인 — 타임핫딜, 기획전, 카테고리별 상품 (임직원몰 메인 공용)"],
+  ["JS","front","template.js","","","js","aisoul/assets/js/front/template.js","","신규 기능 개발을 위한 JavaScript 기본 템플릿"],
+  ["JS","front","withdraw.js","","myshop/withdraw/withdraw.html","js","aisoul/assets/js/front/withdraw.js","","회원 탈퇴 — 가능 여부, 보유 혜택, 탈퇴 사유, 제출"],
+  ["JS","pages","intro-member.js","","index.html","js","aisoul/assets/js/pages/intro-member.js","","인트로(오픈 예정) 화면 — 안내 문구 5번 클릭 시 회원 로그인 노출"],
+  ["JS","pages","main.js","","index.html","js","aisoul/assets/js/pages/main.js","","카테고리 드래그 스크롤·활성 메뉴 가운데 이동, 리뷰 없을 때 리뷰 섹션 숨김"]
+];
+
 var rows = [
   // 메인
   ['메인', '메인', '', '', 'index.html', 'page', ''],
@@ -173,7 +354,6 @@ var rows = [
   ['메인', '메인 모듈', '기획전 02', '', 'index.html', 'inc', 'pages/main/mainPromo02.html'],
   ['메인', '메인 모듈', '리뷰', '', 'index.html', 'inc', 'pages/main/mainReview.html'],
   ['메인', '메인 모듈', '기획전 (하단)', '', 'index.html', 'inc', 'pages/main/mainPromoLast.html'],
-  ['메인', '메인 모듈', 'AI 상품 영역', '', 'index.html', 'inc', 'pages/main/ai_products_area.html'],
 
   // 서브
   ['서브', '카테고리 메인', 'TV/영상가전 서브메인', '', 'pages/sub/depth1_sub_main.html', 'page', ''],
@@ -225,7 +405,230 @@ var rows = [
 
   // 컴포넌트
   ['컴포넌트', '상품 리스트', '필터', '', 'pages/sub/product_search.html', 'inc', 'pages/components/prod_filter.html'],
-];
+].concat(ASSET_ROWS);
+
+// HTML 파일 역할 (파일 경로 기준)
+var HTML_DESC = {
+  'index.html': '쇼핑몰 메인 페이지 및 공통 모듈 구성 — 기본 레이아웃 위에 메인 모듈 12개를 @import로 구성하고, 타임핫딜·기획전·MD PICK은 API 연동을 통한 동적 콘텐츠 렌더링',
+  'pages/main/mainVisual.html': '메인 최상단 비주얼 배너 슬라이드(센터모드 Swiper)',
+  'pages/main/ai_search_area.html': '메인 AI 검색 입력 영역 — HTML은 마운트 영역(data-ai-curation-search-entry-root)만 정의하고, 내부 콘텐츠는 React로 렌더링 (프론트엔드 개발)',
+  'pages/main/mainQuick.html': '메인 퀵메뉴(카테고리 바로가기 아이콘)',
+  'pages/main/mainTimedeal.html': '메인 타임핫딜 영역 — 상품 영역의 HTML 구조 정의 및 API 연동을 통한 상품 정보 출력 (main_hotdeal.js)',
+  'pages/main/mainMdPick.html': 'MD PICK 영역 — 진열 번호(data-module-code) 및 상품 영역의 HTML 구조 정의, API 연동을 통한 상품 정보 출력 (main_mdpick.js)',
+  'pages/main/mainBanner01.html': '메인 배너 영역 01 (카페24 배너매니저 연동)',
+  'pages/main/ai_suggestion_area.html': '메인 AI 추천 영역 — HTML은 마운트 영역(data-ai-curation-main-root)만 정의하고, 추천 콘텐츠는 React로 렌더링 (프론트엔드 개발)',
+  'pages/main/mainPromo.html': '메인 상단 기획전 영역 — 상품 영역의 HTML 구조 정의 및 API 연동을 통한 세로형 기획전 출력 (main_promotions.js)',
+  'pages/main/mainBanner02.html': '메인 배너 영역 02 (카페24 배너매니저 연동)',
+  'pages/main/mainPromo02.html': '메인 기획전 02 — 가로형 기획전 상품 리스트',
+  'pages/main/mainReview.html': '메인 리뷰 영역(알파리뷰 위젯) — 리뷰가 없으면 pages/main.js가 숨김',
+  'pages/main/mainPromoLast.html': '메인 하단 기획전 영역 — 상품 영역의 HTML 구조 정의 및 API 연동을 통한 기획전 출력 (main_promotions.js)',
+  'pages/sub/depth1_sub_main.html': 'TV/영상가전 카테고리 서브메인 — 비주얼, 타임딜, 기획전, MD PICK, 카테고리별 상품',
+  'pages/sub/depth2_sub_main.html': '주방가전 카테고리 서브메인 (구성은 depth1과 동일)',
+  'pages/sub/depth3_sub_main.html': '생활가전 카테고리 서브메인 (구성은 depth1과 동일)',
+  'pages/sub/depth4_sub_main.html': '계절가전 카테고리 서브메인 (구성은 depth1과 동일)',
+  'pages/sub/depth5_sub_main.html': '컴퓨터/디지털 카테고리 서브메인 (구성은 depth1과 동일)',
+  'pages/sub/product_search.html': '상품 검색 결과 — 카페24 검색 모듈 및 상품 필터 UI 구성, 상품 목록은 API 연동을 통한 동적 콘텐츠 렌더링 (product_list.js)',
+  'pages/sub/ai_search.html': 'AI 검색 결과 페이지 — HTML은 배경과 마운트 영역(data-ai-curation-search-root)만 정의하고, 검색 결과는 React로 렌더링 (product_list.js가 이 주소로 연결)',
+  'pages/sub/ai_search_component.html': '서브메인 상단 AI 검색 입력 영역 (서브메인 5개 공용) — HTML은 마운트 영역만 정의하고, 내부 콘텐츠는 React로 렌더링',
+  'pages/promotion/project_list.html': '기획전·이벤트 리스트 — 탭, 카드, 페이지네이션 (promotion_list.js)',
+  'pages/promotion/project_detail.html': '기획전 상세 페이지의 기본 구조 및 공통 본문 호출 (project_detail_body.html)',
+  'pages/promotion/project_detail_body.html': '기획전 상세 본문(타이틀, 카운트다운, 테마, 쿠폰, 탭, 상품) — 상세·미리보기 공용',
+  'pages/promotion/project_preview.html': 'CMS 기획전 미리보기 — 상단 미리보기 바 + 상세 본문',
+  'pages/promotion/event_read.html': '이벤트 상세 페이지의 기본 구조 및 공통 본문 호출 (event_read_body.html)',
+  'pages/promotion/event_read_body.html': '이벤트 상세 본문(제목, 날짜, 내용, 이전/다음 글, 공유) — 상세·미리보기 공용',
+  'pages/promotion/event_preview.html': 'CMS 이벤트 미리보기 — 상단 미리보기 바 + 상세 본문',
+  'pages/promotion/promo_timedeal.html': '타임핫딜 전용 페이지 — 카테고리 탭 + 상품 리스트',
+  'pages/promotion/multi_discount_guide.html': '다품목 할인관 혜택 안내 — 혜택 영역, 타임라인, 패키지, 유의사항',
+  'pages/promotion/multi_discount_shop.html': '다품목 할인관 쇼핑 — 상품 선택, 카트, 혜택 계산',
+  'pages/main/employee_main.html': '임직원몰 메인 — 서브메인과 같은 마크업에 임직원 전용 API 상품(data-product-source)',
+  'pages/employee/employee-entry.html': '임직원몰 진입 — 로그인 및 인증 상태에 따른 페이지 분기 처리',
+  'pages/employee/employee-email-auth.html': '임직원 이메일 인증 요청(회사 메일 입력)',
+  'pages/employee/employee-email-auth-sent.html': '인증 메일 발송 완료 안내 + 재발송',
+  'pages/employee/employee-email-auth-complete.html': '이메일 인증 완료 안내',
+  'pages/employee/employee-email-auth-expire.html': '인증 링크 만료 안내 + 재요청',
+  'pages/employee/employee-form-mail.html': '임직원 인증 메일 HTML 양식 (메일 발송용, 화면 아님)',
+  'pages/employee/employee-mypage.html': '임직원몰 마이페이지 — 카페24 마이쇼핑 모듈(주문현황, 예치금) 재사용',
+  'pages/closed/closed-entry.html': '폐쇄몰 진입(브릿지) — 보안코드 확인 후 폐쇄몰 메인으로 이동',
+  'pages/closed/closed-main.html': '폐쇄몰 메인 — 배너·상품 목록 (closed_mall.js)',
+  'pages/private-shop/secret_code_page.html': '시크릿 코드 입력 화면 — 레이아웃 없이 단독으로 CSS를 직접 불러옴',
+  'pages/layout/employee_layout.html': '임직원몰 전용 레이아웃 — 기본 layout.html과 같은 공통 CSS/JS + 임직원 헤더·푸터',
+  'pages/layout/header/header_type02.html': '일반몰 PC/모바일 공통 2단 헤더 — 로고, 검색, 전체 카테고리 메가메뉴(category_type01.js)',
+  'pages/layout/header/employee_header.html': '임직원몰 전용 헤더 — 임직원 페이지에서만 사용하도록 따로 만들어 임직원몰 레이아웃(employee_layout.html)에 import (카테고리 메뉴는 category_type_employee.js)',
+  'pages/layout/header/sub_header.html': '모바일 서브 헤더(뒤로가기 + 페이지 타이틀)',
+  'pages/layout/header/logo_header.html': '모바일 로고 헤더',
+  'pages/layout/header/prod_header.html': '상품 리스트 모바일 헤더(뒤로가기 + 카테고리명)',
+  'pages/layout/header/prod_detail_header.html': '상품 상세 모바일 헤더',
+  'pages/layout/header/board_header.html': '게시판 모바일 헤더(게시판명)',
+  'pages/layout/footer/footer_type01.html': '공통 푸터 — 고객센터, 회사 정보, 메뉴, 약관 모달, FAMILY SITE',
+  'pages/components/prod_filter.html': '상품 리스트 필터(탭, 모달, 칩) 마크업 — 동작은 filter.js·product_list.js'
+};
+var MEMO = {};
+var LAYOUT_ALL = ['layout/basic/layout.html', 'pages/layout/employee_layout.html'];
+
+function filePath(r) { return /^(pages|aisoul)\//.test(r[6]) ? r[6] : r[4]; }
+function descOf(r) { return r[8] || HTML_DESC[filePath(r)] || ''; }
+function short(p) { return p.replace(/^aisoul\/assets\//, ''); }
+function chips(list, cls) {
+  return list.map(function (p) {
+    var c = cls || (/^(pages|aisoul)\/|^index\.html$/.test(p) ? '' : 'cafe');
+    return '<span' + (c ? ' class="' + c + '"' : '') + ' title="' + esc(p) + '">' + esc(short(p)) + '</span>';
+  }).join('');
+}
+function depHtml(r) {
+  var d = DEP[filePath(r)];
+  if (!d) return '';
+  var h = '';
+  if (d.by) {
+    var all = d.by.some(function (b) { return LAYOUT_ALL.indexOf(b) > -1; });
+    h += '<dt>불러오는 곳</dt><dd>' + (all ? '<span class="all">레이아웃 공통 → 전 화면</span>' : '') + chips(d.by) + '</dd>';
+  }
+  if (d.layout) h += '<dt>레이아웃</dt><dd>' + chips(d.layout) + '</dd>';
+  if (d.imp) h += '<dt>import</dt><dd>' + chips(d.imp) + '</dd>';
+  if (d.css) h += '<dt>CSS</dt><dd>' + chips(d.css) + '</dd>';
+  if (d.js) h += '<dt>JS</dt><dd>' + chips(d.js) + '</dd>';
+  if (d.etc) h += '<dt>기타</dt><dd>카페24 CSS·JS ' + d.etc + '개</dd>';
+  return h ? '<div class="dep"><dl>' + h + '</dl></div>' : '';
+}
+function memoOf(r) {
+  var p = filePath(r), d = DEP[p] || {};
+  var m = [];
+  if (MEMO[p]) m.push(MEMO[p]);
+  var n = NOTES[r[4].indexOf('employee') > -1 ? 'employee' : r[7]];
+  if (n) m.push(n);
+  return m.join('<br>');
+}
+// 노출 상태 — 실제 쇼핑몰에서 화면을 확인할 수 있는 조건 (data/skin15 소스 기준, 최종 소스와 대조 후 확정)
+var STATUS = {
+  always: { label: '상시 노출', desc: '별도 조건 없이 확인 가능한 화면' },
+  cond: { label: '조건부 노출', desc: '로그인, 권한, 운영 데이터 등에 따라 노출' },
+  admin: { label: '관리자 전용', desc: 'CMS 미리보기 등 관리자용 화면' },
+  unused: { label: '운영 미사용', desc: '소스는 존재하나 현재 운영 화면에 미적용' },
+  tpl: { label: '개발 템플릿', desc: '향후 개발을 위한 기본 파일' },
+  backup: { label: '백업', desc: '기존 소스 보존을 위한 파일' },
+  check: { label: '확인 필요', desc: '실제 적용 여부에 대한 추가 확인 필요' }
+};
+var NO_IMPORT = 'skin15 소스 기준 import 하는 곳 없음';
+// 파일별 [상태, 확인 조건] — pages/aisoul 파일과, 이들을 불러오는 카페24 화면
+var EXPOSE = {
+  'index.html': ['always', ''],
+  'pages/main/mainVisual.html': ['cond', '배너매니저에 메인 비주얼 배너 등록 필요'],
+  'pages/main/ai_search_area.html': ['cond', 'AI 큐레이션 CMS 설정에 따라 노출'],
+  'pages/main/mainQuick.html': ['cond', '배너매니저에 퀵메뉴 등록 필요'],
+  'pages/main/mainTimedeal.html': ['cond', '진행 중인 타임핫딜 운영 데이터 필요'],
+  'pages/main/mainMdPick.html': ['cond', '카페24 MD PICK 진열 상품 등록 필요'],
+  'pages/main/mainBanner01.html': ['cond', '배너매니저에 배너 등록 필요'],
+  'pages/main/ai_suggestion_area.html': ['cond', 'AI 큐레이션 CMS 설정에 따라 노출'],
+  'pages/main/mainPromo.html': ['cond', '메인 노출 기획전 데이터 필요'],
+  'pages/main/mainBanner02.html': ['cond', '배너매니저에 배너 등록 필요'],
+  'pages/main/mainPromo02.html': ['cond', '메인 노출 기획전 데이터 필요'],
+  'pages/main/mainReview.html': ['cond', '알파리뷰 리뷰 데이터 필요 (없으면 섹션 숨김)'],
+  'pages/main/mainPromoLast.html': ['cond', '메인 노출 기획전 데이터 필요'],
+  'pages/sub/depth1_sub_main.html': ['always', '타임딜·기획전 섹션은 운영 데이터가 있을 때만 노출'],
+  'pages/sub/depth2_sub_main.html': ['always', '타임딜·기획전 섹션은 운영 데이터가 있을 때만 노출'],
+  'pages/sub/depth3_sub_main.html': ['always', '타임딜·기획전 섹션은 운영 데이터가 있을 때만 노출'],
+  'pages/sub/depth4_sub_main.html': ['always', '타임딜·기획전 섹션은 운영 데이터가 있을 때만 노출'],
+  'pages/sub/depth5_sub_main.html': ['always', '타임딜·기획전 섹션은 운영 데이터가 있을 때만 노출'],
+  'pages/sub/product_search.html': ['always', '검색어 입력 시 결과 노출'],
+  'pages/sub/ai_search.html': ['cond', 'AI 큐레이션 CMS 설정에 따라 노출'],
+  'pages/sub/ai_search_component.html': ['cond', 'AI 큐레이션 CMS 설정에 따라 노출'],
+  'pages/promotion/project_list.html': ['always', ''],
+  'pages/promotion/project_detail.html': ['cond', '유효한 기획전 정보 필요 (전용 기획전은 폐쇄몰·임직원만)'],
+  'pages/promotion/project_detail_body.html': ['cond', '유효한 기획전 정보 필요'],
+  'pages/promotion/project_preview.html': ['admin', 'CMS 미리보기 기능 이용'],
+  'pages/promotion/event_read.html': ['cond', '유효한 이벤트 정보 필요'],
+  'pages/promotion/event_read_body.html': ['cond', '유효한 이벤트 정보 필요'],
+  'pages/promotion/event_preview.html': ['admin', 'CMS 미리보기 기능 이용'],
+  'pages/promotion/promo_timedeal.html': ['cond', '진행 중인 타임핫딜 운영 데이터 필요'],
+  'pages/promotion/multi_discount_guide.html': ['cond', '활성화된 다품목 할인관 필요 (없으면 홈으로 이동)'],
+  'pages/promotion/multi_discount_shop.html': ['cond', '활성화된 다품목 할인관 필요 (없으면 홈으로 이동)'],
+  'pages/main/employee_main.html': ['cond', '임직원 인증 필요'],
+  'pages/employee/employee-entry.html': ['cond', '로그인 필요 (인증 상태에 따라 분기)'],
+  'pages/employee/employee-email-auth.html': ['cond', '로그인 + 임직원 미인증 상태'],
+  'pages/employee/employee-email-auth-sent.html': ['cond', '인증 메일 발송 후'],
+  'pages/employee/employee-email-auth-complete.html': ['cond', '인증 메일의 링크 클릭 후'],
+  'pages/employee/employee-email-auth-expire.html': ['cond', '만료된 인증 링크 접근 시'],
+  'pages/employee/employee-form-mail.html': ['cond', '화면 아님 — 인증 메일 수신 시 메일 본문으로 확인'],
+  'pages/employee/employee-mypage.html': ['cond', '로그인 + 임직원 인증 필요'],
+  'pages/layout/employee_layout.html': ['cond', '임직원몰 화면에서만 사용'],
+  'pages/closed/closed-entry.html': ['cond', '폐쇄몰 접근 경로(제휴사 코드) 필요'],
+  'pages/closed/closed-main.html': ['cond', '폐쇄몰 접근 권한(보안코드 인증) 필요'],
+  'pages/private-shop/secret_code_page.html': ['check', 'skin15 소스 기준 연결된 곳 없음 — 폐쇄몰 진입(closed-entry)과 역할 중복 여부 확인'],
+  'pages/layout/header/header_type02.html': ['always', '일반몰 기본 헤더'],
+  'pages/layout/header/employee_header.html': ['cond', '임직원몰 페이지에서만 사용'],
+  'pages/layout/header/sub_header.html': ['unused', NO_IMPORT],
+  'pages/layout/header/logo_header.html': ['unused', NO_IMPORT],
+  'pages/layout/header/prod_header.html': ['always', '모바일 상품 리스트에서 노출'],
+  'pages/layout/header/prod_detail_header.html': ['always', '모바일 상품 상세에서 노출'],
+  'pages/layout/header/board_header.html': ['always', '모바일 게시판에서 노출'],
+  'pages/layout/footer/footer_type01.html': ['always', ''],
+  'pages/components/prod_filter.html': ['always', '상품 리스트·검색 결과에서 노출'],
+  // aisoul 파일 중 사용처만으로 판단할 수 없는 것
+  'aisoul/assets/css/components/alpha_review_style_backup.css': ['backup', '운영 적용 대상 아님'],
+  'aisoul/assets/js/front/template.js': ['tpl', '신규 기능 개발용'],
+  'aisoul/assets/js/front/closed_entry.js': ['unused', '이전 버전 — closed_mall.js로 대체'],
+  'aisoul/assets/js/components/lnb.js': ['tpl', '추후 기능 분리용으로 생성해 둔 파일'],
+  'aisoul/assets/js/components/main.js': ['tpl', '추후 기능 분리용으로 생성해 둔 파일'],
+  'aisoul/assets/js/components/sale.js': ['tpl', '추후 기능 분리용으로 생성해 둔 파일'],
+  'aisoul/assets/js/front/family_site.js': ['always', 'FAMILY SITE의 임직원몰 링크는 임직원 인증 시에만 노출'],
+  'aisoul/assets/css/pages/employee_email.css': ['cond', '임직원 이메일 인증·폐쇄몰 진입 화면에서 사용'],
+  'aisoul/assets/js/front/employee_auth.js': ['cond', '임직원몰 화면(진입·인증·메인·마이페이지)에서 사용'],
+  'aisoul/assets/js/front/closed_mall.js': ['cond', '폐쇄몰 진입·메인 화면에서 사용'],
+  'aisoul/assets/js/front/orderform_additional.js': ['cond', '주문서·주문 완료·주문 상세 화면에서 사용'],
+  'aisoul/assets/css/components/order.css': ['cond', '주문 완료·교환·반품 신청 화면에서 사용'],
+  'aisoul/assets/js/front/promotion_detail.js': ['cond', '기획전 상세·미리보기 화면에서 사용'],
+  'aisoul/assets/css/components/promo.css': ['cond', '타임핫딜·다품목 할인관 화면에서 사용'],
+  'aisoul/assets/css/components/option.css': ['always', '팝업 레이아웃(상품 옵션 선택 등)에서 사용'],
+  'aisoul/assets/css/pages/sub_main.css': ['always', '카테고리 서브메인·임직원몰 메인에서 사용'],
+  'aisoul/assets/js/front/sub_main.js': ['always', '카테고리 서브메인·임직원몰 메인에서 사용'],
+  'aisoul/assets/js/front/product_list.js': ['always', '상품 리스트·검색 결과에서 사용'],
+  // CSS/JS를 불러오는 카페24 화면
+  'layout/basic/intro.html': ['cond', '오픈 전 인트로 화면 사용 시'],
+  'layout/basic/employee_header.html': ['cond', '임직원몰 페이지에서만 사용'],
+  'order/orderform.html': ['cond', '상품 주문 진행 시 (주문서)'],
+  'order/order_result.html': ['cond', '주문 완료 후'],
+  'board/free/list.html': ['always', '']
+};
+// 이 레이아웃이 불러오면 전 화면 공통
+var COMMON_LAYOUTS = ['layout/basic/layout.html', 'layout/basic/layout_project.html'];
+var RANK = ['always', 'cond', 'admin', 'check', 'unused', 'tpl', 'backup'];
+
+function exposeOf(p, seen) {
+  if (EXPOSE[p]) return EXPOSE[p];
+  if (/^(myshop|member\/(modify|check_password))/.test(p)) return ['cond', '로그인 필요'];
+  if (!/^(pages|aisoul)\//.test(p)) return ['always', ''];
+  var by = (DEP[p] || {}).by;
+  if (!by) return ['unused', NO_IMPORT];
+  if (by.some(function (b) { return COMMON_LAYOUTS.indexOf(b) > -1; })) return ['always', '레이아웃 공통 — 전 화면'];
+  // 불러오는 화면 중 가장 열려 있는 화면의 상태를 따른다
+  seen = seen || {};
+  seen[p] = 1;
+  var best = null, from = '';
+  by.forEach(function (b) {
+    if (seen[b]) return;
+    var e = exposeOf(b, seen);
+    if (!best || RANK.indexOf(e[0]) < RANK.indexOf(best[0])) { best = e; from = b; }
+  });
+  if (!best) return ['check', ''];
+  return [best[0], best[1] || (best[0] === 'always' ? '' : from + ' 기준')];
+}
+function statusOf(r) {
+  if (!r.expose) r.expose = r[6] === '메일 템플릿' ? EXPOSE['pages/employee/employee-form-mail.html'] : exposeOf(filePath(r));
+  return r.expose;
+}
+function statusHtml(r) {
+  var e = statusOf(r);
+  return '<span class="st st-' + e[0] + '" title="' + esc(STATUS[e[0]].desc) + '">' + STATUS[e[0]].label + '</span>' +
+    (e[1] ? '<p class="st-note">' + esc(e[1]) + '</p>' : '');
+}
+
+var TYPE_LABEL = { page: '화면', inc: '공통 모듈', css: 'CSS', js: 'JS' };
+
+// 검색용 문자열 (역할·연결 정보 포함)
+rows.forEach(function (r) {
+  var d = DEP[filePath(r)] || {};
+  var e = statusOf(r);
+  r.search = (r.join(' ') + ' ' + descOf(r) + ' ' + STATUS[e[0]].label + ' ' + e[1] + ' ' + [].concat(d.by || [], d.layout || [], d.css || [], d.js || [], d.imp || []).join(' ')).toLowerCase();
+});
 
 var groups = ['전체'];
 rows.forEach(function (r) { if (groups.indexOf(r[0]) < 0) groups.push(r[0]); });
@@ -243,6 +646,14 @@ groups.forEach(function (g) {
   };
   tabs.appendChild(b);
 });
+// 탭 영역 오른쪽 끝 — 카페24 모듈/변수 리스트 바로가기
+var ext = document.createElement('a');
+ext.className = 'ext-link';
+ext.href = 'https://sdsupport.cafe24.com/product/list.html?cate_no=61';
+ext.target = '_blank';
+ext.rel = 'noopener';
+ext.textContent = 'Cafe24 모듈/변수 리스트 ↗';
+tabs.appendChild(ext);
 
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
@@ -250,22 +661,60 @@ function render() {
   var q = document.getElementById('q').value.trim().toLowerCase();
   var list = rows.filter(function (r) {
     if (current !== '전체' && r[0] !== current) return false;
-    return !q || r.join(' ').toLowerCase().indexOf(q) > -1;
+    if (stFilter && r.expose[0] !== stFilter) return false;
+    return !q || r.search.indexOf(q) > -1;
   });
   document.getElementById('count').textContent = list.length;
+  document.getElementById('countM').textContent = list.length;
+  document.getElementById('toolsToggle').classList.toggle('has-filter', !!(q || stFilter));
   document.getElementById('list').innerHTML = list.length ? list.map(function (r, i) {
+    var url = r[4] ? link(r[4]) : '';
     return '<tr>' +
       '<td class="num">' + String(i + 1).padStart(2, '0') + '</td>' +
       '<td class="d d1">' + esc(r[0]) + '</td><td class="d d2">' + esc(r[1]) + '</td><td class="d d3">' + esc(r[2] + (r[3] ? ' · ' + r[3] : '')) + '</td>' +
-      '<td class="note" data-label="파일 경로">' + esc(r[6].indexOf('pages/') === 0 ? r[6] : r[4]) + '</td>' +
-      '<td class="date" data-label="Date">' + D + '</td>' +
-      '<td class="type" data-label="구분"><span class="badge ' + r[5] + '">' + (r[5] === 'page' ? '화면' : '인클루드') + '</span></td>' +
-      '<td class="url" data-label="URL"><a href="' + esc(link(r[4])) + '" target="_blank" title="' + esc(link(r[4])) + '">' + esc(link(r[4])) + '</a></td>' +
-      '<td class="memo" data-label="비고">' + (NOTES[r[4].indexOf('employee') > -1 ? 'employee' : r[7]] || '') + '</td>' +
+      '<td class="note" data-label="소스 파일 경로"><span class="root-prefix">' + ROOT + '</span>' + esc(filePath(r)) + '</td>' +
+      '<td class="desc" data-label="주요 기능 및 역할">' + esc(descOf(r)) + '</td>' +
+      '<td class="dep" data-label="적용 위치 및 의존 파일">' + depHtml(r) + '</td>' +
+      '<td class="type" data-label="파일 유형"><span class="badge ' + r[5] + '">' + TYPE_LABEL[r[5]] + '</span></td>' +
+      '<td class="status" data-label="노출 상태">' + statusHtml(r) + '</td>' +
+      '<td class="url" data-label="화면 확인">' + (url ? '<a href="' + esc(url) + '" target="_blank" title="' + esc(url) + '">' + esc(url) + '</a>' : '-') + '</td>' +
+      '<td class="memo" data-label="참고 및 유의사항">' + memoOf(r) + '</td>' +
       '</tr>';
-  }).join('') : '<tr><td colspan="9" class="empty">검색 결과가 없습니다.</td></tr>';
+  }).join('') : '<tr><td colspan="11" class="empty">검색 결과가 없습니다.</td></tr>';
 }
 
+// 모바일: 서버·검색·필터 영역 열고 닫기
+var stickyBar = document.querySelector('.sticky-bar'), toolsToggle = document.getElementById('toolsToggle');
+toolsToggle.addEventListener('click', function () {
+  var open = !stickyBar.classList.contains('tools-open');
+  stickyBar.classList.toggle('tools-open', open);
+  toolsToggle.setAttribute('aria-expanded', open);
+});
+
+// 노출 상태 범례 + 필터
+var stFilter = '';
+var stSel = document.getElementById('st'), stLegend = document.getElementById('stLegend');
+Object.keys(STATUS).forEach(function (k) {
+  var n = rows.filter(function (r) { return r.expose[0] === k; }).length;
+  var o = document.createElement('option');
+  o.value = k;
+  o.textContent = STATUS[k].label + ' (' + n + ')';
+  stSel.appendChild(o);
+  var sp = document.createElement('span');
+  sp.innerHTML = '<i class="st st-' + k + '">' + STATUS[k].label + '</i>' + esc(STATUS[k].desc);
+  stLegend.appendChild(sp);
+});
+stSel.addEventListener('change', function () { stFilter = stSel.value; render(); });
+// 선택 상자 열림/닫힘에 맞춰 화살표 회전
+var stWrap = document.getElementById('stWrap');
+function setStOpen(open) { stWrap.classList.toggle('is-open', open); }
+stSel.addEventListener('mousedown', function () { setStOpen(!stWrap.classList.contains('is-open')); });
+stSel.addEventListener('change', function () { setStOpen(false); });
+stSel.addEventListener('blur', function () { setStOpen(false); });
+stSel.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' || e.key === 'Enter' || e.key === 'Tab') setStOpen(false);
+  else if (e.key === ' ' || (e.altKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp'))) setStOpen(true);
+});
 document.getElementById('q').addEventListener('input', render);
 render();
 </script>
