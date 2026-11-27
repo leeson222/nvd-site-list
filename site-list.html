@@ -91,6 +91,11 @@
   .dep-legend span.cafe { background: #fff; border: 1px solid #e3e3e3; color: #888; }
   .dep-legend span.all { background: #3355ff; color: #fff; }
   .empty { text-align: center; padding: 40px; color: #999; }
+  .top-btn { position: fixed; right: 24px; bottom: 24px; z-index: 20; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 1px solid #e5e5e5; border-radius: 50%; background: #fff; color: #111; box-shadow: 0 4px 12px rgba(0,0,0,.12); opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .2s, transform .2s, visibility .2s; }
+  .top-btn.is-show { opacity: 1; visibility: visible; transform: translateY(0); }
+  .top-btn:hover { background: #111; border-color: #111; color: #fff; }
+  .top-btn svg { width: 18px; height: 18px; }
+  @media (max-width: 768px) { .top-btn { right: 16px; bottom: 16px; width: 42px; height: 42px; } }
   td.url a, td.note { overflow-wrap: anywhere; }
 
   /* 태블릿: 상단 정리 + 표는 가로 스크롤 */
@@ -215,6 +220,8 @@
     <tbody id="list"></tbody>
   </table>
 </div>
+
+<button type="button" class="top-btn" id="topBtn" aria-label="맨 위로"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script>
 // group: 탭 / type: page = 레이아웃이 붙는 화면, inc = 다른 화면에 import 되는 조각
@@ -716,6 +723,13 @@ stSel.addEventListener('keydown', function (e) {
 });
 document.getElementById('q').addEventListener('input', render);
 render();
+
+// 탑 버튼 — 한 화면 이상 내려가면 노출
+var topBtn = document.getElementById('topBtn');
+function updateTopBtn() { topBtn.classList.toggle('is-show', window.scrollY > window.innerHeight * 0.5); }
+window.addEventListener('scroll', updateTopBtn, { passive: true });
+topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+updateTopBtn();
 </script>
 </body>
 </html>
